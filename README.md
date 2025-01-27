@@ -9,4 +9,4 @@ To start the bot, use `./gradlew run`.
 To shut off the bot, write `shutdown` to standard input or `Ctrl + C`.
 
 ## TODO:
-* Complete music functionality
+* Add new features to the bot!

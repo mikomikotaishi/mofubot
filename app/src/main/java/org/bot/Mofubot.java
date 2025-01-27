@@ -12,13 +12,18 @@ import javax.security.auth.login.LoginException;
 import org.bot.audio.*;
 import org.bot.utilities.*;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.Widget.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,16 +32,45 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Mofubot extends ListenerAdapter {
+    private final JDA jda;
+    private final String SHUTDOWN_PASSWORD;
+    private final AudioPlayerManager playerManager;
+    private final AudioPlayer player;
+
+    public Mofubot() {
+        this.jda = null;
+        this.SHUTDOWN_PASSWORD = null;
+
+        this.playerManager = new DefaultAudioPlayerManager();
+        playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
+        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+        this.player = playerManager.createPlayer();
+        AudioSendHandler handler = new AudioPlayerSendHandler(player);
+    }
+
+    public Mofubot(JDA jda, String shutdownPassword) {
+        this.jda = jda;
+        this.SHUTDOWN_PASSWORD = shutdownPassword;
+
+        this.playerManager = new DefaultAudioPlayerManager();
+        playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
+        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+        this.player = playerManager.createPlayer();
+        AudioSendHandler handler = new AudioPlayerSendHandler(player);
+    }
+
     public static void main(String[] args) throws LoginException, InterruptedException {
         
         Properties properties = new Properties();
         String BOT_TOKEN = null;
+        String SHUTDOWN_PASSWORD = null;
 
         try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties")) {
             if (input == null)
                 System.err.println("Unable to find config.properties!");
             properties.load(input);
             BOT_TOKEN = properties.getProperty("BOT_TOKEN");
+            SHUTDOWN_PASSWORD = properties.getProperty("SHUTDOWN_PASSWORD");
             if (BOT_TOKEN == null) {
                 System.err.println("No bot token found!");
                 return;
@@ -53,9 +87,11 @@ public class Mofubot extends ListenerAdapter {
         );
 
         JDA api = JDABuilder.createDefault(BOT_TOKEN, INTENTS)
-            .addEventListeners(new Mofubot())
             .build()
             .awaitReady();
+
+        Mofubot botInstance = new Mofubot(api, SHUTDOWN_PASSWORD);
+        api.addEventListener(botInstance);
     }
 
     @Override
@@ -89,10 +125,54 @@ public class Mofubot extends ListenerAdapter {
                 return;
             }
 
-            VoiceChannel voiceChannel = (VoiceChannel)member.getVoiceState().getChannel();
+            String query = content.substring("!play".length()).trim();
+            if (query.isEmpty()) {
+                textChannel.sendMessage("Please provide a search query!").queue();
+                return;
+            }
+
+            AudioChannel voiceChannel = member.getVoiceState().getChannel();
             AudioManager manager = guild.getAudioManager();
-            manager.setSendingHandler(new SendHandler());
-            manager.openAudioConnection((AudioChannel)textChannel);
+            manager.setSendingHandler(new AudioPlayerSendHandler(player));
+            manager.openAudioConnection(voiceChannel);
+
+            playerManager.loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(textChannel, player));
+        }
+
+        if (content.equals("!disconnect")) {
+            System.out.println("Disconnect command executed");
+            AudioManager manager = guild.getAudioManager();
+    
+            if (manager.isConnected()) {
+                // Disconnect from the voice channel
+                manager.closeAudioConnection();
+                textChannel.sendMessage("Disconnected from the voice channel.").queue();
+            } else {
+                textChannel.sendMessage("I'm not connected to a voice channel!").queue();
+            }
+        }
+
+        if (content.startsWith("!shutdown")) {
+            System.out.println("Shutdown command attempted.");
+            String[] args = content.split(" ");
+            switch (args.length) {
+                case 1:
+                    System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
+                    textChannel.sendMessage("No password provided!").queue();
+                case 2:
+                    String password = args[1];
+                    if (password.equals(SHUTDOWN_PASSWORD)) {
+                        event.getChannel().sendMessage("Shutting down bot.").queue();
+                        jda.shutdown();
+                    } else {
+                        System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
+                        textChannel.sendMessage("Incorrect shutdown password!").queue();
+                    }
+                    break;
+                default:
+                    System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
+                    textChannel.sendMessage("Too many parameters provided!").queue();
+            }
         }
 
         if (!content.startsWith("!"))

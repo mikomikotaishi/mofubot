@@ -13,6 +13,8 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven(url = "https://jitpack.io")
+    maven(url = "https://maven.lavalink.dev/releases")
 }
 
 dependencies {
@@ -25,6 +27,8 @@ dependencies {
     implementation(libs.guava)
 
     implementation("net.dv8tion:JDA:5.2.2")
+    implementation("dev.arbjerg:lavaplayer:2.2.2")
+    implementation("dev.lavalink.youtube:common:1.11.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
