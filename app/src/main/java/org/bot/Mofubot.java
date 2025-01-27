@@ -159,6 +159,7 @@ public class Mofubot extends ListenerAdapter {
                 case 1:
                     System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
                     textChannel.sendMessage("No password provided!").queue();
+                    break;
                 case 2:
                     String password = args[1];
                     if (password.equals(SHUTDOWN_PASSWORD)) {
