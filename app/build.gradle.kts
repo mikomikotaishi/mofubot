@@ -4,6 +4,7 @@
  * This generated file contains a sample Java application project to get you started.
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.12/userguide/building_java_projects.html in the Gradle documentation.
  */
+import java.io.ByteArrayOutputStream
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
@@ -36,12 +37,44 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    // modularity.inferModulePath = true 
 }
 
 application {
     // Define the main class for the application.
+    // mainModule = "org.bot"
     mainClass = "org.bot.Mofubot"
 }
+
+// tasks.register("findAutomaticModules") {
+//     group = "verification"
+//     description = "Finds automatic module names of all dependencies"
+
+//     doLast {
+//         val jdepsPath = "${System.getProperty("java.home")}/bin/jdeps"
+//         val runtimeClasspath = configurations.runtimeClasspath.get().files
+
+//         println("Analysing dependencies for automatic module names...")
+
+//         runtimeClasspath.forEach { jar ->
+//             if (jar.name.endsWith(".jar")) {
+//                 val output = ByteArrayOutputStream()
+//                 exec {
+//                     commandLine(jdepsPath, "--module-path", configurations.runtimeClasspath.get().asPath, "-s", jar.absolutePath)
+//                     standardOutput = output
+//                     errorOutput = System.err
+//                 }
+//                 println("Dependency: ${jar.name}")
+//                 println(output.toString().trim())
+//                 println("-".repeat(80))
+//             }
+//         }
+//     }
+// }
+
+// tasks.named("build") {
+//     dependsOn("findAutomaticModules")
+// }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
