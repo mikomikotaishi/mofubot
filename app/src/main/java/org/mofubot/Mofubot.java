@@ -9,9 +9,6 @@ import java.util.EnumSet;
 import java.util.Properties;
 import javax.security.auth.login.LoginException;
 
-import org.mofubot.audio.*;
-import org.mofubot.utilities.*;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -30,6 +27,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+
+import org.mofubot.audio.*;
+import org.mofubot.utilities.*;
 
 public class Mofubot extends ListenerAdapter {
     private final JDA jda;
