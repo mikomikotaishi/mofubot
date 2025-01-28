@@ -1,4 +1,4 @@
-package org.bot.utilities;
+package org.mofubot.utilities;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -42,8 +42,8 @@ java {
 
 application {
     // Define the main class for the application.
-    // mainModule = "org.bot"
-    mainClass = "org.bot.Mofubot"
+    // mainModule = "org.mofubot"
+    mainClass = "org.mofubot.Mofubot"
 }
 
 // tasks.register("findAutomaticModules") {

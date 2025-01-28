@@ -1,4 +1,4 @@
-package org.bot.audio;
+package org.mofubot.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;

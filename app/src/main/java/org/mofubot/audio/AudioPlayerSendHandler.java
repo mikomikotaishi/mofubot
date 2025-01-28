@@ -1,4 +1,4 @@
-package org.bot.audio;
+package org.mofubot.audio;
 
 import java.nio.ByteBuffer;
 
