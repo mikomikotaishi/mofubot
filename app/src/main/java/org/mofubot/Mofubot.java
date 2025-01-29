@@ -261,6 +261,7 @@ public class Mofubot extends ListenerAdapter {
             event.reply("You need to be in a voice channel to use this command!").queue();
             return;
         }
+        event.reply("Queueing song.");
         MessageChannel textChannel = event.getChannel();
         AudioChannel voiceChannel = event.getMember().getVoiceState().getChannel();
         AudioManager manager = event.getGuild().getAudioManager();
