@@ -143,7 +143,7 @@ public class Mofubot extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
         MessageChannel textChannel = event.getChannel();
         Member member = event.getMember();
