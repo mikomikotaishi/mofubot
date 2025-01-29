@@ -9,7 +9,7 @@ In that directory, there is a file called `INSTRUCTIONS.txt`.
 
 To start the bot, use `./gradlew run`.
 
-To shut off the bot, write `shutdown` to standard input or `Ctrl + C`.
+To shut off the bot, run the `shutdown` bot command with your shutdown password. (`Ctrl + C` works too, but the former is preferred.)
 
 ## TODO:
 * Add new features to the bot!
