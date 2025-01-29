@@ -10,6 +10,9 @@ app/src/test
 app/bin
 app/build
 
+# Debug
+app/src/main/java/org/mofubot/utilities/alternate_responses.txt
+
 # Tools
 /.direnv/
 /venv/
