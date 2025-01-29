@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
@@ -42,6 +43,7 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 import org.mofubot.audio.*;
+import org.mofubot.commands.*;
 import org.mofubot.utilities.*;
 
 public class Mofubot extends ListenerAdapter {
@@ -49,27 +51,28 @@ public class Mofubot extends ListenerAdapter {
     private final String SHUTDOWN_PASSWORD;
     private final AudioPlayerManager playerManager;
     private final AudioPlayer player;
+    private Random rand;
 
     public Mofubot() {
         this.jda = null;
         this.SHUTDOWN_PASSWORD = null;
-
         this.playerManager = new DefaultAudioPlayerManager();
         playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         this.player = playerManager.createPlayer();
         AudioSendHandler handler = new AudioPlayerSendHandler(player);
+        this.rand = new Random();
     }
 
     public Mofubot(JDA jda, String shutdownPassword) {
         this.jda = jda;
         this.SHUTDOWN_PASSWORD = shutdownPassword;
-
         this.playerManager = new DefaultAudioPlayerManager();
         playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         this.player = playerManager.createPlayer();
         AudioSendHandler handler = new AudioPlayerSendHandler(player);
+        this.rand = new Random();
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
@@ -116,6 +119,8 @@ public class Mofubot extends ListenerAdapter {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
             // Ping command
             Commands.slash("ping", "Reports the ping of the bot"),
+            // Magic 8 Ball
+            Commands.slash("magic8ball", "Consults the Magic 8 Ball"),
             // Shutdown command
             Commands.slash("shutdown", "Shuts down the bot")
                 .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")),
@@ -160,6 +165,9 @@ public class Mofubot extends ListenerAdapter {
                 break;
             case "ping":
                 ping(event);
+                break;
+            case "magic8ball":
+                magic8Ball(event);
                 break;
             case "shutdown":
                 String password = event.getOption("password").getAsString();
@@ -217,14 +225,18 @@ public class Mofubot extends ListenerAdapter {
     }
 
     public void ping(SlashCommandInteractionEvent event) {
-        System.out.println("Ping command executed");
+        System.out.println("Ping command executed.");
         long startTime = System.currentTimeMillis();
-
-        event.reply("Pong!").queue(response -> {
+        event.reply("Konkon!").queue(response -> {
             long endTime = System.currentTimeMillis();
             long latency = endTime - startTime;
-            response.editOriginal("Pong! (Latency: " + latency + "ms)").queue();
+            response.editOriginal("Konkon! (Latency: " + latency + "ms)").queue();
         });
+    }
+
+    public void magic8Ball(SlashCommandInteractionEvent event) {
+        System.out.println("Magic 8 Ball command executed.");
+        event.reply(Magic8Ball.ask()).queue();
     }
 
     public void shutdown(SlashCommandInteractionEvent event, String password) {
@@ -239,24 +251,21 @@ public class Mofubot extends ListenerAdapter {
     }
 
     public void play(SlashCommandInteractionEvent event, String query) {
-        System.out.println("Play command executed");
+        System.out.println("Play command executed.");
         if (event.getMember().getVoiceState().getChannel() == null) {
             event.reply("You need to be in a voice channel to use this command!").queue();
             return;
         }
-
         MessageChannel textChannel = event.getChannel();
-
         AudioChannel voiceChannel = event.getMember().getVoiceState().getChannel();
         AudioManager manager = event.getGuild().getAudioManager();
         manager.setSendingHandler(new AudioPlayerSendHandler(player));
         manager.openAudioConnection(voiceChannel);
-
         playerManager.loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(textChannel, player));
     }
 
     public void disconnect(SlashCommandInteractionEvent event) {
-        System.out.println("Disconnect command executed");
+        System.out.println("Disconnect command executed.");
         AudioManager manager = event.getGuild().getAudioManager();
 
         if (manager.isConnected()) {
