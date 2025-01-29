@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -16,6 +19,7 @@ import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBu
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -23,10 +27,19 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 import org.mofubot.audio.*;
 import org.mofubot.utilities.*;
@@ -60,7 +73,6 @@ public class Mofubot extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
-        
         Properties properties = new Properties();
         String BOT_TOKEN = null;
         String SHUTDOWN_PASSWORD = null;
@@ -90,6 +102,32 @@ public class Mofubot extends ListenerAdapter {
             .build()
             .awaitReady();
 
+        CommandListUpdateAction commands = api.updateCommands();
+
+        commands.addCommands(
+            // Ban command
+            Commands.slash("ban", "Ban a user from this server. Requires permission to ban users.")
+                .addOptions(new OptionData(USER, "user", "The user to ban")
+                    .setRequired(true))
+                .addOptions(new OptionData(INTEGER, "del_days", "Delete messages from the past days.")
+                    .setRequiredRange(0, 7))
+                .addOptions(new OptionData(STRING, "reason", "The ban reason to use (default: Banned by <user>)"))
+                .setGuildOnly(true)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
+            // Ping command
+            Commands.slash("ping", "Reports the ping of the bot"),
+            // Shutdown command
+            Commands.slash("shutdown", "Shuts down the bot")
+                .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")),
+            // Play command
+            Commands.slash("play", "Plays audio in the voice channel of the user")
+                .addOptions(new OptionData(STRING, "query", "The query for YouTube"))
+                .setGuildOnly(true),
+            // Disconnect command
+            Commands.slash("disconnect", "Disconnects the bot from voice channel")
+                .setGuildOnly(true)
+        ).queue();
+
         Mofubot botInstance = new Mofubot(api, SHUTDOWN_PASSWORD);
         api.addEventListener(botInstance);
     }
@@ -103,80 +141,128 @@ public class Mofubot extends ListenerAdapter {
         String content = message.getContentRaw();
         Guild guild = message.getGuild();
 
-
         if (event.getAuthor().isBot() || !event.isFromGuild()) 
             return;
 
-        if (content.equals("!ping")) {
-            System.out.println("Ping command executed");
-            long startTime = System.currentTimeMillis();
+        ResponseHandler.handleMessage(content, textChannel);
+    }
 
-            textChannel.sendMessage("Pong!").queue(response -> {
-                long endTime = System.currentTimeMillis();
-                long latency = endTime - startTime;
-                response.editMessage("Pong! (Latency: " + latency + "ms)").queue();
-            });
-        }
-
-        if (content.startsWith("!play")) {
-            System.out.println("Play command executed");
-            if (author == null || member.getVoiceState().getChannel() == null) {
-                textChannel.sendMessage("You need to be in a voice channel to use this command!").queue();
-                return;
-            }
-
-            String query = content.substring("!play".length()).trim();
-            if (query.isEmpty()) {
-                textChannel.sendMessage("Please provide a search query!").queue();
-                return;
-            }
-
-            AudioChannel voiceChannel = member.getVoiceState().getChannel();
-            AudioManager manager = guild.getAudioManager();
-            manager.setSendingHandler(new AudioPlayerSendHandler(player));
-            manager.openAudioConnection(voiceChannel);
-
-            playerManager.loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(textChannel, player));
-        }
-
-        if (content.equals("!disconnect")) {
-            System.out.println("Disconnect command executed");
-            AudioManager manager = guild.getAudioManager();
     
-            if (manager.isConnected()) {
-                // Disconnect from the voice channel
-                manager.closeAudioConnection();
-                textChannel.sendMessage("Disconnected from the voice channel.").queue();
-            } else {
-                textChannel.sendMessage("I'm not connected to a voice channel!").queue();
-            }
+    @Override 
+    public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
+        if (event.getGuild() == null)
+            return;
+        switch (event.getName()) {
+            case "ban":
+                Member member = event.getOption("user").getAsMember();
+                User user = event.getOption("user").getAsUser();
+                ban(event, user, member);
+                break;
+            case "ping":
+                ping(event);
+                break;
+            case "shutdown":
+                String password = event.getOption("password").getAsString();
+                shutdown(event, password);
+                break;
+            case "play":
+                String query = event.getOption("query").getAsString();
+                play(event, query);
+                break;
+            case "disconnect":
+                disconnect(event);
+                break;
+            default:
+                event.reply("Invalid command!").setEphemeral(true).queue();
+        }
+    }
+
+    public void ban(SlashCommandInteractionEvent event, User user, Member member) {
+        System.out.println("Ban command attempted.");
+        event.deferReply(true).queue();
+        InteractionHook hook = event.getHook();
+        hook.setEphemeral(true);
+        if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
+            System.out.println("Attempted (failed) ban attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
+            hook.sendMessage("You do not have the required permissions to ban users from this server.").queue();
+            return;
         }
 
-        if (content.startsWith("!shutdown")) {
-            System.out.println("Shutdown command attempted.");
-            String[] args = content.split(" ");
-            switch (args.length) {
-                case 1:
-                    System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
-                    textChannel.sendMessage("No password provided!").queue();
-                    break;
-                case 2:
-                    String password = args[1];
-                    if (password.equals(SHUTDOWN_PASSWORD)) {
-                        event.getChannel().sendMessage("Shutting down bot.").queue();
-                        jda.shutdown();
-                    } else {
-                        System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
-                        textChannel.sendMessage("Incorrect shutdown password!").queue();
-                    }
-                    break;
-                default:
-                    System.out.println("Attempted (failed) shutdown attempt by " + author.getGlobalName() + "(" + author.getId() + ")");
-                    textChannel.sendMessage("Too many parameters provided!").queue();
-            }
+        Member selfMember = event.getGuild().getSelfMember();
+        if (!selfMember.hasPermission(Permission.BAN_MEMBERS)) {
+            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
+            hook.sendMessage("I don't have the required permissions to ban users from this server.").queue();
+            return;
         }
 
-        if (!content.startsWith("!"))
-            ResponseHandler.handleMessage(content, textChannel);
+        if (member != null && !selfMember.canInteract(member)) {
+            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
+            hook.sendMessage("This user is too powerful for me to ban.").queue();
+            return;
+        }
+
+        int delDays = event.getOption("del_days", 0, OptionMapping::getAsInt);
+
+        String reason = event.getOption("reason",
+                () -> "Banned by " + event.getUser().getName(),
+                OptionMapping::getAsString);
+
+        event.getGuild().ban(user, delDays, TimeUnit.DAYS)
+            .reason(reason)
+            .flatMap(v -> hook.sendMessage("Banned user " + user.getName()))
+            .queue();
+
+        System.out.println("Ban executed by " + event.getUser().getGlobalName() + " (" + event.getUser().getId() + ") " 
+            + "on " + user.getName() + " (" + user.getId() + ") ");
+    }
+
+    public void ping(SlashCommandInteractionEvent event) {
+        System.out.println("Ping command executed");
+        long startTime = System.currentTimeMillis();
+
+        event.reply("Pong!").queue(response -> {
+            long endTime = System.currentTimeMillis();
+            long latency = endTime - startTime;
+            response.editOriginal("Pong! (Latency: " + latency + "ms)").queue();
+        });
+    }
+
+    public void shutdown(SlashCommandInteractionEvent event, String password) {
+        System.out.println("Shutdown command attempted.");
+        if (password.equals(SHUTDOWN_PASSWORD)) {
+            event.reply("Shutting down bot.").queue();
+            jda.shutdown();
+        } else {
+            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
+            event.reply("Incorrect shutdown password!").queue();
+        }
+    }
+
+    public void play(SlashCommandInteractionEvent event, String query) {
+        System.out.println("Play command executed");
+        if (event.getMember().getVoiceState().getChannel() == null) {
+            event.reply("You need to be in a voice channel to use this command!").queue();
+            return;
+        }
+
+        MessageChannel textChannel = event.getChannel();
+
+        AudioChannel voiceChannel = event.getMember().getVoiceState().getChannel();
+        AudioManager manager = event.getGuild().getAudioManager();
+        manager.setSendingHandler(new AudioPlayerSendHandler(player));
+        manager.openAudioConnection(voiceChannel);
+
+        playerManager.loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(textChannel, player));
+    }
+
+    public void disconnect(SlashCommandInteractionEvent event) {
+        System.out.println("Disconnect command executed");
+        AudioManager manager = event.getGuild().getAudioManager();
+
+        if (manager.isConnected()) {
+            manager.closeAudioConnection();
+            event.reply("Disconnected from the voice channel.").queue();
+        } else
+            event.reply("I'm not connected to a voice channel!").queue();
     }
 }
