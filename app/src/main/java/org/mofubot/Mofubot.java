@@ -120,9 +120,9 @@ public class Mofubot extends ListenerAdapter {
             // Ping command
             Commands.slash("ping", "Reports the ping of the bot"),
             // Magic 8 Ball
-            Commands.slash("magic8ball", "Consults the Magic 8 Ball"),
+            Commands.slash("magic8ball", "Consults the Magic 8 Ball")
                 .addOptions(new OptionData(STRING, "query", "The question to ask the magic 8 ball")
-                .setRequired(true)),
+                    .setRequired(true)),
             // Shutdown command
             Commands.slash("shutdown", "Shuts down the bot")
                 .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
