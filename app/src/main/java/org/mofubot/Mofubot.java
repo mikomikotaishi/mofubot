@@ -3,6 +3,8 @@
  */
 package org.mofubot;
 
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
@@ -12,6 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
+
+import org.mofubot.audio.*;
+import org.mofubot.commands.*;
+import org.mofubot.utilities.*;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -40,11 +46,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
-
-import org.mofubot.audio.*;
-import org.mofubot.commands.*;
-import org.mofubot.utilities.*;
 
 public class Mofubot extends ListenerAdapter {
     private final JDA jda;
