@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class Ban implements Command {
-    private Ban() {};
+    private Ban() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Ban command attempted.");

@@ -7,7 +7,7 @@ import org.mofubot.commands.structures.Command;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Ping implements Command {
-    private Ping() {};
+    private Ping() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Ping command executed.");

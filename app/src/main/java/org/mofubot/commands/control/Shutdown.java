@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Shutdown implements JDAControl {
-    private Shutdown() {};
+    private Shutdown() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event, @Nonnull JDA instance) {
         System.out.println("Shutdown command attempted.");

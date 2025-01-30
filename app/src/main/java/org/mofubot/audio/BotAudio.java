@@ -27,7 +27,7 @@ public class BotAudio {
     private BotAudio() {
         this.manager = new DefaultAudioPlayerManager();
         this.manager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
-        this.manager.registerSourceManager(new YoutubeAudioSourceManager());
+        this.manager.registerSourceManager(new YoutubeAudioSourceManager(true));
         this.player = manager.createPlayer();
     }
 

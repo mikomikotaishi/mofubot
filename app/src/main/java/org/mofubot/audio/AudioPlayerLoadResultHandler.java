@@ -31,11 +31,13 @@ public class AudioPlayerLoadResultHandler implements AudioLoadResultHandler {
 
     @Override
     public void noMatches() {
+        System.err.println("No matches found for query.");
         textChannel.sendMessage("No matches found!").queue();
     }
 
     @Override
     public void loadFailed(FriendlyException exception) {
+        System.err.println("Failed to load track.");
         textChannel.sendMessage("Failed to load track: " + exception.getMessage()).queue();
     }
 }
