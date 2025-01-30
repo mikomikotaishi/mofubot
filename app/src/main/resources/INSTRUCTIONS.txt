@@ -2,4 +2,4 @@ A bot token and shutdown password must be provided to the bot.
 To use it, create a file called "config.properties" here and include the necessary information, in the following format (without the angle brackets):
 
 BOT_TOKEN=<your bot token here>
-SHUTDOWN_PASSWORD=<your password here>
+MASTER_PASSWORD=<your password here>

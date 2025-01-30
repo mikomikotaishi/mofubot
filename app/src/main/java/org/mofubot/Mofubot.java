@@ -10,9 +10,9 @@ import javax.security.auth.login.LoginException;
 
 import org.mofubot.commands.admin.*;
 import org.mofubot.commands.audio.*;
-import org.mofubot.commands.control.*;
 import org.mofubot.commands.general.*;
-import org.mofubot.utilities.ConfigLoader;
+import org.mofubot.commands.system.*;
+import org.mofubot.system.*;
 import org.mofubot.utilities.ResponseHandler;
 
 import net.dv8tion.jda.api.JDA;
@@ -34,24 +34,24 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class Mofubot extends ListenerAdapter {
     private final JDA jda;
-    private final String SHUTDOWN_PASSWORD;
+    private final String MASTER_PASSWORD;
     private Random rand;
 
     public Mofubot() {
         this.jda = null;
-        this.SHUTDOWN_PASSWORD = null;
+        this.MASTER_PASSWORD = null;
         this.rand = new Random();
     }
 
     public Mofubot(JDA jda, String shutdownPassword) {
         this.jda = jda;
-        this.SHUTDOWN_PASSWORD = shutdownPassword;
+        this.MASTER_PASSWORD = shutdownPassword;
         this.rand = new Random();
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
         String BOT_TOKEN = ConfigLoader.getBotToken();
-        String SHUTDOWN_PASSWORD = ConfigLoader.getShutdownPassword();
+        String MASTER_PASSWORD = ConfigLoader.getMasterPassword();
 
         EnumSet<GatewayIntent> INTENTS = EnumSet.of(
             GatewayIntent.GUILD_MEMBERS,
@@ -87,24 +87,6 @@ public class Mofubot extends ListenerAdapter {
                 .addOptions(new OptionData(STRING, "query", "The query for YouTube")
                     .setRequired(true))
                 .setGuildOnly(true),
-
-            // ====== Control commands ======            
-            // Shutdown command
-            Commands.slash("shutdown", "Shuts down the bot")
-                .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
-                    .setRequired(true)),
-
-            // ====== Imageboard commands ======
-            // Danbooru command
-            Commands.slash("danbooru", "Query danbooru")
-                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
-                    .setRequired(true))
-                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
-            // Gelbooru command
-            Commands.slash("gelbooru", "Query gelbooru")
-                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
-                    .setRequired(true))
-                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
             
             // ====== General commands ======
             // Fox fact command
@@ -118,10 +100,28 @@ public class Mofubot extends ListenerAdapter {
             // Weather command
             Commands.slash("weather", "Obtain weather information for a specified location")
                 .addOptions(new OptionData(STRING, "location", "The location to search")
+                    .setRequired(true)),
+
+            // ====== Imageboard commands ======
+            // Danbooru command
+            Commands.slash("danbooru", "Query danbooru")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
                     .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            // Gelbooru command
+            Commands.slash("gelbooru", "Query gelbooru")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+
+            // ====== System commands ======            
+            // Shutdown command
+            Commands.slash("shutdown", "Shuts down the bot")
+            .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
+                .setRequired(true))
         ).queue();
 
-        Mofubot botInstance = new Mofubot(api, SHUTDOWN_PASSWORD);
+        Mofubot botInstance = new Mofubot(api, MASTER_PASSWORD);
         api.addEventListener(botInstance);
     }
 

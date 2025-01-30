@@ -1,4 +1,4 @@
-package org.mofubot.utilities;
+package org.mofubot.system;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.Properties;
 public class ConfigLoader {
     private static final Properties properties = new Properties();
     private static String botToken;
-    private static String shutdownPassword;
+    private static String masterPassword;
     private static String weatherToken;
 
     static {
@@ -19,14 +19,14 @@ public class ConfigLoader {
             }
             properties.load(input);
             botToken = properties.getProperty("BOT_TOKEN");
-            shutdownPassword = properties.getProperty("SHUTDOWN_PASSWORD");
+            masterPassword = properties.getProperty("MASTER_PASSWORD");
             weatherToken = properties.getProperty("WEATHER_TOKEN");
 
             if (botToken == null) {
                 System.err.println("No bot token found!");
                 throw new IllegalArgumentException("No bot token found!");
             }
-            if (shutdownPassword == null) {
+            if (masterPassword == null) {
                 System.err.println("No shutdown password found!");
                 throw new IllegalArgumentException("No shutdown password found!");
             }
@@ -42,8 +42,8 @@ public class ConfigLoader {
         return botToken;
     }
 
-    public static String getShutdownPassword() {
-        return shutdownPassword;
+    public static String getMasterPassword() {
+        return masterPassword;
     }
 
     public static String getWeatherToken() {

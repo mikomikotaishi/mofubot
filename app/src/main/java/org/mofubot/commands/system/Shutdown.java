@@ -1,9 +1,9 @@
-package org.mofubot.commands.control;
+package org.mofubot.commands.system;
 
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.JDAControl;
-import org.mofubot.utilities.ConfigLoader;
+import org.mofubot.system.ConfigLoader;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,7 +14,7 @@ public class Shutdown implements JDAControl {
     public static void invoke(@Nonnull SlashCommandInteractionEvent event, @Nonnull JDA instance) {
         System.out.println("Shutdown command attempted.");
         String password = event.getOption("password").getAsString();
-        if (password.equals(ConfigLoader.getShutdownPassword())) {
+        if (password.equals(ConfigLoader.getMasterPassword())) {
             event.reply("Shutting down bot.").queue();
             instance.shutdown();
         } else {
