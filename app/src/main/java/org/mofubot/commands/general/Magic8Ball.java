@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.Command;
+import org.mofubot.system.RandomNumberGenerator;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
@@ -36,10 +37,9 @@ public class Magic8Ball implements Command {
         "Outlook not so good",
         "Very doubtful"
     };
-    private static final Random rand = new Random();
 
     private static String getResponse() {
-        int index = rand.nextInt(ANSWERS.length);
+        int index = RandomNumberGenerator.generateRandomNumber(ANSWERS.length);
         return ANSWERS[index];
     }
 

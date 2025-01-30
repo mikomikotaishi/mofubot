@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class BotAudio {
-    private static BotAudio instance; 
+    private static BotAudio INSTANCE; 
 
     private AudioManager audioManager;
     private final AudioPlayer player;
@@ -32,9 +32,9 @@ public class BotAudio {
     }
 
     public static synchronized BotAudio getInstance() {
-        if (instance == null)
-            instance = new BotAudio();
-        return instance;
+        if (INSTANCE == null)
+            INSTANCE = new BotAudio();
+        return INSTANCE;
     }
 
     public void setAudioManager(AudioManager audioManager) {

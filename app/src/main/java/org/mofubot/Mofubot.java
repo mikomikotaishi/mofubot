@@ -3,7 +3,6 @@ package org.mofubot;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 import java.util.EnumSet;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
@@ -35,18 +34,15 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 public class Mofubot extends ListenerAdapter {
     private final JDA jda;
     private final String MASTER_PASSWORD;
-    private Random rand;
 
     public Mofubot() {
         this.jda = null;
         this.MASTER_PASSWORD = null;
-        this.rand = new Random();
     }
 
     public Mofubot(JDA jda, String shutdownPassword) {
         this.jda = jda;
         this.MASTER_PASSWORD = shutdownPassword;
-        this.rand = new Random();
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
@@ -148,6 +144,9 @@ public class Mofubot extends ListenerAdapter {
         switch (event.getName()) {
             case "ban":
                 Ban.invoke(event);
+                break;
+            case "foxfacts":
+                FoxFacts.invoke(event);
                 break;
             case "ping":
                 Ping.invoke(event);

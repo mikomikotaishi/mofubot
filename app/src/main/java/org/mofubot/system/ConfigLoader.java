@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
-    private static final Properties properties = new Properties();
+    private static final Properties PROPERTIES = new Properties();
     private static String botToken;
     private static String masterPassword;
     private static String weatherToken;
@@ -17,10 +17,10 @@ public class ConfigLoader {
                 System.err.println("Unable to find config.properties!");
                 throw new FileNotFoundException("Unable to find config.properties!");
             }
-            properties.load(input);
-            botToken = properties.getProperty("BOT_TOKEN");
-            masterPassword = properties.getProperty("MASTER_PASSWORD");
-            weatherToken = properties.getProperty("WEATHER_TOKEN");
+            PROPERTIES.load(input);
+            botToken = PROPERTIES.getProperty("BOT_TOKEN");
+            masterPassword = PROPERTIES.getProperty("MASTER_PASSWORD");
+            weatherToken = PROPERTIES.getProperty("WEATHER_TOKEN");
 
             if (botToken == null) {
                 System.err.println("No bot token found!");
