@@ -3,12 +3,12 @@ package org.mofubot.commands.imageboard;
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.APICommand;
-import org.mofubot.utilities.E621Client;
+import org.mofubot.utilities.GyateBooruClient;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class E621 implements APICommand {
-    private E621() {}
+public class GyateBooru implements APICommand {
+    private GyateBooru() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         

@@ -11,7 +11,7 @@ public class Play implements AudioCommand {
     private Play() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
-        System.out.println("Play command executed.");
+        System.out.println("Play command invoked.");
         String query = event.getOption("query").getAsString();
         if (event.getMember().getVoiceState().getChannel() == null) {
             event.reply("You need to be in a voice channel to use this command!").queue();

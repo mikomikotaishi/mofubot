@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    kotlin("jvm") version "2.1.10"
 }
 
 repositories {
@@ -26,6 +27,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    implementation(kotlin("stdlib"))
 
     implementation("net.dv8tion:JDA:5.2.2")
     implementation("dev.arbjerg:lavaplayer:2.2.2")

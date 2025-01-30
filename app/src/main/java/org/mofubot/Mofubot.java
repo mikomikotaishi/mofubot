@@ -10,6 +10,7 @@ import javax.security.auth.login.LoginException;
 import org.mofubot.commands.admin.*;
 import org.mofubot.commands.audio.*;
 import org.mofubot.commands.general.*;
+import org.mofubot.commands.imageboard.*;
 import org.mofubot.commands.system.*;
 import org.mofubot.system.*;
 import org.mofubot.utilities.ResponseHandler;
@@ -104,17 +105,31 @@ public class Mofubot extends ListenerAdapter {
                 .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
                     .setRequired(true))
                 .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            // e621 command
+            Commands.slash("e621", "Query e621")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
             // Gelbooru command
             Commands.slash("gelbooru", "Query gelbooru")
                 .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
                     .setRequired(true))
                 .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            // Rule34 command
+            Commands.slash("rule34", "Query Rule34")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
 
             // ====== System commands ======            
+            // Reload config command
+            Commands.slash("reloadconfig", "Reloads config.properties")
+                .addOptions(new OptionData(STRING, "password", "The master pasword (specified in config.properties)")
+                    .setRequired(true)),
             // Shutdown command
             Commands.slash("shutdown", "Shuts down the bot")
-            .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
-                .setRequired(true))
+                .addOptions(new OptionData(STRING, "password", "The master password (specified in config.properties)")
+                    .setRequired(true))
         ).queue();
 
         Mofubot botInstance = new Mofubot(api, MASTER_PASSWORD);
@@ -142,26 +157,49 @@ public class Mofubot extends ListenerAdapter {
         if (event.getGuild() == null)
             return;
         switch (event.getName()) {
+            // Admin
             case "ban":
                 Ban.invoke(event);
                 break;
-            case "foxfacts":
-                FoxFacts.invoke(event);
-                break;
-            case "ping":
-                Ping.invoke(event);
-                break;
-            case "magic8ball":
-                Magic8Ball.invoke(event);
-                break;
-            case "shutdown":
-                Shutdown.invoke(event, jda);
+            // Audio
+            case "disconnect":
+                Disconnect.invoke(event);
                 break;
             case "play":
                 Play.invoke(event);
                 break;
-            case "disconnect":
-                Disconnect.invoke(event);
+            // General
+            case "foxfacts":
+                FoxFacts.invoke(event);
+                break;
+            case "magic8ball":
+                Magic8Ball.invoke(event);
+                break;
+            case "ping":
+                Ping.invoke(event);
+                break;
+            case "weather":
+                Weather.invoke(event);
+                break;
+            // Imageboard
+            case "danbooru":
+                Danbooru.invoke(event);
+                break;
+            case "e621":
+                E621.invoke(event);
+                break;
+            case "gelbooru":
+                Gelbooru.invoke(event);
+                break;
+            case "gyatebooru":
+                GyateBooru.invoke(event);
+                break;
+            case "rule34":
+                Rule34.invoke(event);
+                break;
+            // System
+            case "shutdown":
+                Shutdown.invoke(event, jda);
                 break;
             default:
                 event.reply("Invalid command!").setEphemeral(true).queue();

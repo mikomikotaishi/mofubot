@@ -22,7 +22,7 @@ public class FoxFacts implements Command {
     }
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
-        System.out.println("Fox fact command executed.");
+        System.out.println("Fox fact command invoked.");
         event.reply(FoxFacts.getResponse()).queue();
     }
 }

@@ -49,4 +49,21 @@ public class ConfigLoader {
     public static String getWeatherToken() {
         return weatherToken;
     }
+
+    public static void reloadConfig() {
+        try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.err.println("Unable to find config.properties!");
+                throw new FileNotFoundException("Unable to find config.properties!");
+            }
+            PROPERTIES.load(input);
+            weatherToken = PROPERTIES.getProperty("WEATHER_TOKEN");
+            
+            if (weatherToken == null)
+                System.err.println("No weather token found!");
+                
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -12,7 +12,7 @@ public class Disconnect implements AudioCommand {
     private Disconnect() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
-        System.out.println("Disconnect command executed.");
+        System.out.println("Disconnect command invoked.");
         AudioManager manager = event.getGuild().getAudioManager();
 
         if (manager.isConnected()) {
