@@ -5,94 +5,56 @@ package org.mofubot;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.EnumSet;
-import java.util.Properties;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 
-import org.mofubot.audio.*;
-import org.mofubot.commands.*;
-import org.mofubot.utilities.*;
+import org.mofubot.commands.admin.*;
+import org.mofubot.commands.audio.*;
+import org.mofubot.commands.control.*;
+import org.mofubot.commands.general.*;
+import org.mofubot.utilities.ConfigLoader;
+import org.mofubot.utilities.ResponseHandler;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer;
-import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class Mofubot extends ListenerAdapter {
     private final JDA jda;
     private final String SHUTDOWN_PASSWORD;
-    private final AudioPlayerManager playerManager;
-    private final AudioPlayer player;
     private Random rand;
 
     public Mofubot() {
         this.jda = null;
         this.SHUTDOWN_PASSWORD = null;
-        this.playerManager = new DefaultAudioPlayerManager();
-        playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
-        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
-        this.player = playerManager.createPlayer();
-        AudioSendHandler handler = new AudioPlayerSendHandler(player);
         this.rand = new Random();
     }
 
     public Mofubot(JDA jda, String shutdownPassword) {
         this.jda = jda;
         this.SHUTDOWN_PASSWORD = shutdownPassword;
-        this.playerManager = new DefaultAudioPlayerManager();
-        playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
-        playerManager.registerSourceManager(new YoutubeAudioSourceManager());
-        this.player = playerManager.createPlayer();
-        AudioSendHandler handler = new AudioPlayerSendHandler(player);
         this.rand = new Random();
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
-        Properties properties = new Properties();
-        String BOT_TOKEN = null;
-        String SHUTDOWN_PASSWORD = null;
-
-        try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties")) {
-            if (input == null)
-                System.err.println("Unable to find config.properties!");
-            properties.load(input);
-            BOT_TOKEN = properties.getProperty("BOT_TOKEN");
-            SHUTDOWN_PASSWORD = properties.getProperty("SHUTDOWN_PASSWORD");
-            if (BOT_TOKEN == null) {
-                System.err.println("No bot token found!");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String BOT_TOKEN = ConfigLoader.getBotToken();
+        String SHUTDOWN_PASSWORD = ConfigLoader.getShutdownPassword();
 
         EnumSet<GatewayIntent> INTENTS = EnumSet.of(
             GatewayIntent.GUILD_MEMBERS,
@@ -108,6 +70,7 @@ public class Mofubot extends ListenerAdapter {
         CommandListUpdateAction commands = api.updateCommands();
 
         commands.addCommands(
+            // ====== Admin commands ======
             // Ban command
             Commands.slash("ban", "Ban a user from this server. Requires permission to ban users.")
                 .addOptions(new OptionData(USER, "user", "The user to ban")
@@ -117,24 +80,48 @@ public class Mofubot extends ListenerAdapter {
                 .addOptions(new OptionData(STRING, "reason", "The ban reason to use (default: Banned by <user>)"))
                 .setGuildOnly(true)
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
-            // Ping command
-            Commands.slash("ping", "Reports the ping of the bot"),
-            // Magic 8 Ball
-            Commands.slash("magic8ball", "Consults the Magic 8 Ball")
-                .addOptions(new OptionData(STRING, "query", "The question to ask the magic 8 ball")
-                    .setRequired(true)),
-            // Shutdown command
-            Commands.slash("shutdown", "Shuts down the bot")
-                .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
-                    .setRequired(true)),
+            
+            // ====== Audio commands ======
+            // Disconnect command
+            Commands.slash("disconnect", "Disconnects the bot from voice channel")
+                .setGuildOnly(true),
             // Play command
             Commands.slash("play", "Plays audio in the voice channel of the user")
                 .addOptions(new OptionData(STRING, "query", "The query for YouTube")
                     .setRequired(true))
                 .setGuildOnly(true),
-            // Disconnect command
-            Commands.slash("disconnect", "Disconnects the bot from voice channel")
-                .setGuildOnly(true)
+
+            // ====== Control commands ======            
+            // Shutdown command
+            Commands.slash("shutdown", "Shuts down the bot")
+                .addOptions(new OptionData(STRING, "password", "The password used to shutdown the bot (specified in config.properties)")
+                    .setRequired(true)),
+
+            // ====== Imageboard commands ======
+            // Danbooru command
+            Commands.slash("danbooru", "Query danbooru")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            // Gelbooru command
+            Commands.slash("gelbooru", "Query gelbooru")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            
+            // ====== General commands ======
+            // Fox fact command
+            Commands.slash("foxfacts", "Get an interesting fact about foxes"),
+            // Magic 8 Ball command
+            Commands.slash("magic8ball", "Consults the Magic 8 Ball")
+                .addOptions(new OptionData(STRING, "query", "The question to ask the magic 8 ball")
+                    .setRequired(true)),
+            // Ping command
+            Commands.slash("ping", "Reports the ping of the bot"),
+            // Weather command
+            Commands.slash("weather", "Obtain weather information for a specified location")
+                .addOptions(new OptionData(STRING, "location", "The location to search")
+                    .setRequired(true))
         ).queue();
 
         Mofubot botInstance = new Mofubot(api, SHUTDOWN_PASSWORD);
@@ -163,120 +150,25 @@ public class Mofubot extends ListenerAdapter {
             return;
         switch (event.getName()) {
             case "ban":
-                Member member = event.getOption("user").getAsMember();
-                User user = event.getOption("user").getAsUser();
-                ban(event, user, member);
+                Ban.invoke(event);
                 break;
             case "ping":
-                ping(event);
+                Ping.invoke(event);
                 break;
             case "magic8ball":
-                magic8Ball(event);
+                Magic8Ball.invoke(event);
                 break;
             case "shutdown":
-                String password = event.getOption("password").getAsString();
-                shutdown(event, password);
+                Shutdown.invoke(event, jda);
                 break;
             case "play":
-                String query = event.getOption("query").getAsString();
-                play(event, query);
+                Play.invoke(event);
                 break;
             case "disconnect":
-                disconnect(event);
+                Disconnect.invoke(event);
                 break;
             default:
                 event.reply("Invalid command!").setEphemeral(true).queue();
         }
-    }
-
-    public void ban(SlashCommandInteractionEvent event, User user, Member member) {
-        System.out.println("Ban command attempted.");
-        event.deferReply(true).queue();
-        InteractionHook hook = event.getHook();
-        hook.setEphemeral(true);
-        if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
-            System.out.println("Attempted (failed) ban attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
-            hook.sendMessage("You do not have the required permissions to ban users from this server.").queue();
-            return;
-        }
-
-        Member selfMember = event.getGuild().getSelfMember();
-        if (!selfMember.hasPermission(Permission.BAN_MEMBERS)) {
-            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
-            hook.sendMessage("I don't have the required permissions to ban users from this server.").queue();
-            return;
-        }
-
-        if (member != null && !selfMember.canInteract(member)) {
-            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
-            hook.sendMessage("This user is too powerful for me to ban.").queue();
-            return;
-        }
-
-        int delDays = event.getOption("del_days", 0, OptionMapping::getAsInt);
-
-        String reason = event.getOption("reason",
-                () -> "Banned by " + event.getUser().getName(),
-                OptionMapping::getAsString);
-
-        event.getGuild().ban(user, delDays, TimeUnit.DAYS)
-            .reason(reason)
-            .flatMap(v -> hook.sendMessage("Banned user " + user.getName()))
-            .queue();
-
-        System.out.println("Ban executed by " + event.getUser().getGlobalName() + " (" + event.getUser().getId() + ") " 
-            + "on " + user.getName() + " (" + user.getId() + ") ");
-    }
-
-    public void ping(SlashCommandInteractionEvent event) {
-        System.out.println("Ping command executed.");
-        long startTime = System.currentTimeMillis();
-        event.reply("Konkon!").queue(response -> {
-            long endTime = System.currentTimeMillis();
-            long latency = endTime - startTime;
-            response.editOriginal("Konkon! (Latency: " + latency + "ms)").queue();
-        });
-    }
-
-    public void magic8Ball(SlashCommandInteractionEvent event) {
-        System.out.println("Magic 8 Ball command executed.");
-        event.reply(Magic8Ball.ask()).queue();
-    }
-
-    public void shutdown(SlashCommandInteractionEvent event, String password) {
-        System.out.println("Shutdown command attempted.");
-        if (password.equals(SHUTDOWN_PASSWORD)) {
-            event.reply("Shutting down bot.").queue();
-            jda.shutdown();
-        } else {
-            System.out.println("Attempted (failed) shutdown attempt by " + event.getUser().getGlobalName() + "(" + event.getUser().getId() + ")");
-            event.reply("Incorrect shutdown password!").queue();
-        }
-    }
-
-    public void play(SlashCommandInteractionEvent event, String query) {
-        System.out.println("Play command executed.");
-        if (event.getMember().getVoiceState().getChannel() == null) {
-            event.reply("You need to be in a voice channel to use this command!").queue();
-            return;
-        }
-        event.reply("Queueing song.").queue();
-        MessageChannel textChannel = event.getChannel();
-        AudioChannel voiceChannel = event.getMember().getVoiceState().getChannel();
-        AudioManager manager = event.getGuild().getAudioManager();
-        manager.setSendingHandler(new AudioPlayerSendHandler(player));
-        manager.openAudioConnection(voiceChannel);
-        playerManager.loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(textChannel, player));
-    }
-
-    public void disconnect(SlashCommandInteractionEvent event) {
-        System.out.println("Disconnect command executed.");
-        AudioManager manager = event.getGuild().getAudioManager();
-
-        if (manager.isConnected()) {
-            manager.closeAudioConnection();
-            event.reply("Disconnected from the voice channel.").queue();
-        } else
-            event.reply("I'm not connected to a voice channel!").queue();
     }
 }

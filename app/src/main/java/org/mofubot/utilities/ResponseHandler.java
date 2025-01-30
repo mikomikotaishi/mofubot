@@ -6,6 +6,8 @@ import java.util.Map;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 public class ResponseHandler {
+    private ResponseHandler() {};
+
     private static final Map<String, String> RESPONSES = new HashMap<>() {{
         put("mofumofu", "fuwafuwa!");
         put("fuwafuwa", "mofumofu!");

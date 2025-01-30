@@ -30,6 +30,10 @@ dependencies {
     implementation("net.dv8tion:JDA:5.2.2")
     implementation("dev.arbjerg:lavaplayer:2.2.2")
     implementation("dev.lavalink.youtube:common:1.11.3")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation("com.google.code.gson:gson:2.12.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

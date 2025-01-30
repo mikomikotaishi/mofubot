@@ -1,8 +1,16 @@
-package org.mofubot.commands;
+package org.mofubot.commands.general;
 
 import java.util.Random;
 
-public class Magic8Ball {
+import javax.annotation.Nonnull;
+
+import org.mofubot.commands.structures.Command;
+
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+
+public class Magic8Ball implements Command {
+    private Magic8Ball() {};
+
     private static final String[] ANSWERS = {
         // Affirmative
         "It is certain",
@@ -30,8 +38,13 @@ public class Magic8Ball {
     };
     private static final Random rand = new Random();
 
-    public static String ask() {
+    private static String getResponse() {
         int index = rand.nextInt(ANSWERS.length);
         return ANSWERS[index];
+    }
+
+    public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
+        System.out.println("Magic 8 Ball command executed.");
+        event.reply(Magic8Ball.getResponse()).queue();
     }
 }
