@@ -20,6 +20,7 @@ public class Weather implements APICommand {
         System.out.println("Weather command invoked.");
         String location = event.getOption("location").getAsString();
         try {
+            System.out.println("Attempting to retrieve data for location: " + location);
             JsonObject weatherData = weatherClient.getWeather(location);
             double temp = weatherData.get("temp").getAsDouble();
             event.reply("Current temperature in " + location + ": " + temp + "°C");

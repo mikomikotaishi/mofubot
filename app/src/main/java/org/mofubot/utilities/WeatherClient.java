@@ -23,11 +23,14 @@ public class WeatherClient {
 
         String URL = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=" + API_KEY + "&units=metric";
         Request request = new Request.Builder().url(URL).build();
+        System.out.println("Issuing request to OpenWeatherMap for location: " + location);
         try (Response response = client.newCall(request).execute()) {
+            System.out.println("Obtaining response.");
             if (!response.isSuccessful()) {
                 System.err.println("Failed to execute HTTP request!");
                 throw new IOException("Failed to execute HTTP request");
             }
+            System.out.println("Successfully obtained response.");
             String responseBody = response.body().string();
             return JsonParser.parseString(responseBody).getAsJsonObject().getAsJsonObject("main");
         }
