@@ -3,7 +3,7 @@ package org.mofubot.commands.general;
 import javax.annotation.Nonnull;
 
 import org.mofubot.structures.commands.BasicCommand;
-import org.mofubot.system.RandomNumberGenerator;
+import org.mofubot.utilities.calculations.RandomNumberGenerator;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
