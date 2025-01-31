@@ -76,6 +76,9 @@ public class Mofubot extends ListenerAdapter {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
             
             // ====== Audio commands ======
+            // Clear command
+            Commands.slash("clear", "Clears all music in the current queue")
+                .setGuildOnly(true),
             // Disconnect command
             Commands.slash("disconnect", "Disconnects the bot from voice channel")
                 .setGuildOnly(true),
@@ -83,6 +86,9 @@ public class Mofubot extends ListenerAdapter {
             Commands.slash("play", "Plays audio in the voice channel of the user")
                 .addOptions(new OptionData(STRING, "query", "The query for YouTube")
                     .setRequired(true))
+                .setGuildOnly(true),
+            // Skip command
+            Commands.slash("skip", "Skips the current song")
                 .setGuildOnly(true),
             
             // ====== General commands ======
@@ -167,11 +173,17 @@ public class Mofubot extends ListenerAdapter {
                 Ban.invoke(event);
                 break;
             // Audio
+            case "clear":
+                Clear.invoke(event);
+                break;
             case "disconnect":
                 Disconnect.invoke(event);
                 break;
             case "play":
                 Play.invoke(event);
+                break;
+            case "skip":
+                Skip.invoke(event);
                 break;
             // General
             case "foxfacts":
