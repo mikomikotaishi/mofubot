@@ -1,13 +1,13 @@
-package org.mofubot.commands.general;
+package org.mofubot.commands.game;
 
 import javax.annotation.Nonnull;
 
-import org.mofubot.structures.commands.BasicCommand;
+import org.mofubot.structures.commands.GameCommand;
 import org.mofubot.utilities.calculations.RandomNumberGenerator;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class Magic8Ball implements BasicCommand {
+public class Magic8Ball implements GameCommand {
     private Magic8Ball() {};
 
     private static final String[] ANSWERS = {

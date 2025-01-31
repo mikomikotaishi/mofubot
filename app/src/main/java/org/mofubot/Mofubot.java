@@ -9,6 +9,7 @@ import javax.security.auth.login.LoginException;
 
 import org.mofubot.commands.admin.*;
 import org.mofubot.commands.audio.*;
+import org.mofubot.commands.game.Magic8Ball;
 import org.mofubot.commands.general.*;
 import org.mofubot.commands.imageboard.*;
 import org.mofubot.commands.system.*;
