@@ -6,7 +6,6 @@ build
 
 # Bot token
 app/src/main/resources/config.properties
-app/src/test
 app/bin
 app/build
 
