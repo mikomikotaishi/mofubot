@@ -2,6 +2,7 @@ package org.mofubot.clients;
 
 import java.io.IOException;
 
+import org.mofubot.commands.structures.Client;
 import org.mofubot.system.ConfigLoader;
 
 import com.google.gson.JsonObject;
@@ -11,7 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class WeatherClient {
+public class WeatherClient extends Client {
     private final OkHttpClient client = new OkHttpClient();
     private final String API_KEY = ConfigLoader.getWeatherToken();
 

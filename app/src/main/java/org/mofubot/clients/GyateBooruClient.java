@@ -1,5 +1,7 @@
 package org.mofubot.clients;
 
-public class GyateBooruClient {
+import org.mofubot.commands.structures.Client;
+
+public class GyateBooruClient extends Client {
     
 }

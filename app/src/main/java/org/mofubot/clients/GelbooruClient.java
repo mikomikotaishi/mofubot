@@ -1,5 +1,7 @@
 package org.mofubot.clients;
 
-public class GelbooruClient {
+import org.mofubot.commands.structures.Client;
+
+public class GelbooruClient extends Client {
     
 }
