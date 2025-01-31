@@ -3,7 +3,7 @@ package org.mofubot.commands.imageboard;
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.APICommand;
-import org.mofubot.utilities.GyateBooruClient;
+import org.mofubot.clients.GyateBooruClient;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 

@@ -1,4 +1,4 @@
-package org.mofubot.utilities;
+package org.mofubot.clients;
 
 public class Rule34Client {
     

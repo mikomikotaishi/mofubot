@@ -7,12 +7,19 @@ import org.mofubot.commands.structures.AudioCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class Disconnect implements AudioCommand {
+public class Clear implements AudioCommand {
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
-        System.out.println("Disconnect command invoked.");
+        System.out.println("Clear command invoked.");
         long guildId = event.getGuild().getIdLong();
         BotAudio botAudio = BotAudio.getInstance(guildId);
-        botAudio.disconnect();
-        event.reply("Disconnected from the voice channel.").queue();
+        int queueSize = botAudio.getScheduler().getQueue().size();
+
+        if (queueSize == 0) {
+            event.reply("The queue is already empty.").queue();
+            return;
+        }
+
+        botAudio.getScheduler().clear();
+        event.reply("Cleared **" + queueSize + "** tracks from the queue.").queue();
     }
 }

@@ -115,6 +115,11 @@ public class Mofubot extends ListenerAdapter {
                 .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
                     .setRequired(true))
                 .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
+            // Gyate Booru command
+            Commands.slash("gyatebooru", "Query gyate booru")
+                .addOptions(new OptionData(STRING, "tag1", "The first tag to search")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "tag2", "The second tag to search")),
             // Rule34 command
             Commands.slash("rule34", "Query Rule34")
                 .addOptions(new OptionData(STRING, "tag1", "The first tag to search")

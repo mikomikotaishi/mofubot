@@ -1,7 +1,7 @@
 package org.mofubot.audio;
 
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -15,14 +15,13 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class BotAudio {
-    private static BotAudio INSTANCE; 
-
-    private AudioManager audioManager;
-    private final AudioPlayer player;
+    private static final Map<Long, BotAudio> instances = new HashMap<>();
     private final AudioPlayerManager manager;
+    private final AudioPlayer player;
+    private final TrackScheduler scheduler;
+    private AudioManager audioManager;
     private MessageChannel textChannel;
     private AudioChannel voiceChannel;
-    private final Queue<String> trackQueue = new LinkedList<>();
     private boolean activated = false;
 
     private BotAudio() {
@@ -30,12 +29,12 @@ public class BotAudio {
         this.manager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
         this.manager.registerSourceManager(new YoutubeAudioSourceManager(true));
         this.player = manager.createPlayer();
+        this.scheduler = new TrackScheduler(this, player);
+        player.addListener(scheduler);
     }
 
-    public static synchronized BotAudio getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new BotAudio();
-        return INSTANCE;
+    public static BotAudio getInstance(long guildId) {
+        return instances.computeIfAbsent(guildId, k -> new BotAudio());
     }
 
     public void setAudioManager(AudioManager audioManager) {
@@ -50,16 +49,16 @@ public class BotAudio {
         this.voiceChannel = voiceChannel;
     }
 
-    public AudioManager getAudioManager() {
-        return audioManager;
-    }
-
     public AudioPlayer getAudioPlayer() {
         return player;
     }
 
     public AudioPlayerManager getAudioPlayerManager() {
         return manager;
+    }
+
+    public TrackScheduler getScheduler() {
+        return scheduler;
     }
 
     public MessageChannel getTextChannel() {
@@ -70,15 +69,7 @@ public class BotAudio {
         return voiceChannel;
     }
 
-    public Queue<String> getTrackQueue() {
-        return trackQueue;
-    }
-
-    public void clear() {
-        trackQueue.clear();
-    }
-
-    public boolean activityState() {
+    public boolean isActive() {
         return activated;
     }
 
@@ -87,9 +78,12 @@ public class BotAudio {
     }
 
     public void disconnect() {
+        activated = false;
+        scheduler.clear();
+        player.stopTrack();
+        if (audioManager != null)
+            audioManager.closeAudioConnection();
         textChannel = null;
         voiceChannel = null;
-        activated = false;
-        clear();
     }
 }

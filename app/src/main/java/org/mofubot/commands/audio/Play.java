@@ -5,27 +5,40 @@ import javax.annotation.Nonnull;
 import org.mofubot.audio.*;
 import org.mofubot.commands.structures.AudioCommand;
 
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Play implements AudioCommand {
-    private Play() {}
-
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Play command invoked.");
-        String query = event.getOption("query").getAsString();
-        if (event.getMember().getVoiceState().getChannel() == null) {
+        if (event.getMember().getVoiceState() == null || !event.getMember().getVoiceState().inAudioChannel()) {
             event.reply("You need to be in a voice channel to use this command!").queue();
             return;
         }
-        event.reply("Queueing song.").queue();
-        if (!BotAudio.getInstance().activityState()) {
-            BotAudio.getInstance().setTextChannel(event.getChannel());
-            BotAudio.getInstance().setVoiceChannel(event.getMember().getVoiceState().getChannel());
-            BotAudio.getInstance().activate();
+        long guildId = event.getGuild().getIdLong();
+        BotAudio botAudio = BotAudio.getInstance(guildId);
+        AudioManager audioManager = event.getGuild().getAudioManager();
+
+        botAudio.setAudioManager(audioManager);
+        botAudio.setTextChannel(event.getChannel());
+        AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+
+        if (!botAudio.isActive()) {
+            botAudio.setVoiceChannel(userChannel);
+            botAudio.activate();
+            audioManager.openAudioConnection(userChannel);
+            audioManager.setSendingHandler(new AudioPlayerSendHandler(botAudio.getAudioPlayer()));
+        } else if (!botAudio.getVoiceChannel().equals(userChannel)) {
+            botAudio.setVoiceChannel(userChannel);
+            audioManager.openAudioConnection(userChannel);
         }
-        BotAudio.getInstance().setAudioManager(event.getGuild().getAudioManager());
-        BotAudio.getInstance().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(BotAudio.getInstance().getAudioPlayer()));
-        BotAudio.getInstance().getAudioManager().openAudioConnection(BotAudio.getInstance().getVoiceChannel());
-        BotAudio.getInstance().getAudioPlayerManager().loadItem("ytsearch:" + query, new AudioPlayerLoadResultHandler(BotAudio.getInstance().getTextChannel(), BotAudio.getInstance().getAudioPlayer()));
+
+        String query = event.getOption("query").getAsString();
+        String identifier = query.startsWith("http") ? query : "ytsearch:" + query;
+
+        event.reply("Queueing...").queue();
+        botAudio.getAudioPlayerManager().loadItem(identifier, 
+            new AudioPlayerLoadResultHandler(botAudio.getTextChannel(), botAudio.getAudioPlayer(), botAudio.getScheduler()));
     }
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.APICommand;
-import org.mofubot.utilities.WeatherClient;
+import org.mofubot.clients.WeatherClient;
 
 import com.google.gson.JsonObject;
 

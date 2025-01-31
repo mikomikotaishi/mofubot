@@ -3,7 +3,7 @@ package org.mofubot.commands.imageboard;
 import javax.annotation.Nonnull;
 
 import org.mofubot.commands.structures.APICommand;
-import org.mofubot.utilities.E621Client;
+import org.mofubot.clients.E621Client;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
