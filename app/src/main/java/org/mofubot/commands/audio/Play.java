@@ -25,11 +25,13 @@ public class Play implements AudioCommand {
         AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
 
         if (!botAudio.isActive()) {
+            System.out.println("Bot audio currently inactive. Activating...");
             botAudio.setVoiceChannel(userChannel);
             botAudio.activate();
             audioManager.openAudioConnection(userChannel);
             audioManager.setSendingHandler(new AudioPlayerSendHandler(botAudio.getAudioPlayer()));
         } else if (!botAudio.getVoiceChannel().equals(userChannel)) {
+            System.out.println("Voice channel and user channel not the same!");
             botAudio.setVoiceChannel(userChannel);
             audioManager.openAudioConnection(userChannel);
         }

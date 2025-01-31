@@ -76,6 +76,9 @@ public class Mofubot extends ListenerAdapter {
                 .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
             
             // ====== Audio commands ======
+            // Check queue command
+            Commands.slash("checkqueue", "Sends the list of all songs in the current queue")
+                .setGuildOnly(true),
             // Clear command
             Commands.slash("clear", "Clears all music in the current queue")
                 .setGuildOnly(true),
@@ -173,6 +176,9 @@ public class Mofubot extends ListenerAdapter {
                 Ban.invoke(event);
                 break;
             // Audio
+            case "checkqueue":
+                CheckQueue.invoke(event);
+                break;
             case "clear":
                 Clear.invoke(event);
                 break;

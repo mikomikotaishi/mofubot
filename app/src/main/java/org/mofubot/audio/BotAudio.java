@@ -31,6 +31,7 @@ public class BotAudio {
         this.player = manager.createPlayer();
         this.scheduler = new TrackScheduler(this, player);
         player.addListener(scheduler);
+        player.setVolume(100);
     }
 
     public static BotAudio getInstance(long guildId) {

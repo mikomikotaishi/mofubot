@@ -21,12 +21,14 @@ public class AudioPlayerLoadResultHandler implements AudioLoadResultHandler {
 
     @Override
     public void trackLoaded(AudioTrack track) {
+        System.out.println("Loading track: " + track.getInfo().title);
         textChannel.sendMessage("Added to queue: **" + track.getInfo().title + "**").queue();
         scheduler.queue(track);
     }
 
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
+        System.out.println("Loaidng playlist: " + playlist.getName());
         if (playlist.isSearchResult()) {
             AudioTrack firstTrack = playlist.getTracks().get(0);
             textChannel.sendMessage("Added to queue: **" + firstTrack.getInfo().title + "**").queue();

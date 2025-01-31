@@ -22,21 +22,26 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track) {
-        if (!player.startTrack(track, true))
+        if (!player.startTrack(track, true)) {
+            System.out.println("Queued track: " + track.getInfo().title);
             queue.offer(track);
+        } else {
+            System.out.println("Now playing: " + track.getInfo().title);
+        }
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             AudioTrack nextTrack = queue.poll();
-            if (nextTrack != null)
+            if (nextTrack != null) {
+                System.out.println("Current song ended. Beginning next song...");
                 player.startTrack(nextTrack, false);
-            else {
+            } else {
+                System.out.println("Song queue empty.");
                 MessageChannel textChannel = botAudio.getTextChannel();
-                if (textChannel != null) 
-                    textChannel.sendMessage("Queue is empty. Use `/play` to add more tracks.").queue();
-                botAudio.disconnect();
+                if (textChannel != null)
+                    textChannel.sendMessage("Queue is empty. Use /play to queue new songs.").queue();
             }
         }
     }
