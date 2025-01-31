@@ -1,5 +1,5 @@
 package org.mofubot.commands.structures;
 
-public class Client {
+public abstract class Client {
     
 }
