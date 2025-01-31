@@ -1,15 +1,13 @@
 package org.mofubot.commands.general;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
-import org.mofubot.commands.structures.Command;
+import org.mofubot.structures.commands.BasicCommand;
 import org.mofubot.system.RandomNumberGenerator;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class FoxFacts implements Command {
+public class FoxFacts implements BasicCommand {
     private FoxFacts() {}
 
     private static final String[] FACTS = {

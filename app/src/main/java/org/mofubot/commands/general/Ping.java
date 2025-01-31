@@ -2,11 +2,11 @@ package org.mofubot.commands.general;
 
 import javax.annotation.Nonnull;
 
-import org.mofubot.commands.structures.Command;
+import org.mofubot.structures.commands.BasicCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class Ping implements Command {
+public class Ping implements BasicCommand {
     private Ping() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {

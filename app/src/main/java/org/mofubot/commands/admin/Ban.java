@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
-import org.mofubot.commands.structures.Command;
+import org.mofubot.structures.commands.BasicCommand;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
-public class Ban implements Command {
+public class Ban implements BasicCommand {
     private Ban() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {

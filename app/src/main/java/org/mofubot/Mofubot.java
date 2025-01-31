@@ -224,6 +224,7 @@ public class Mofubot extends ListenerAdapter {
             case "shutdown":
                 Shutdown.invoke(event, jda);
                 break;
+            // Default
             default:
                 event.reply("Invalid command!").setEphemeral(true).queue();
         }

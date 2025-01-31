@@ -1,12 +1,11 @@
-package org.mofubot.commands.structures;
+package org.mofubot.structures.commands;
 
 import javax.annotation.Nonnull;
 
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public interface JDAControl {
-    static void invoke(@Nonnull SlashCommandInteractionEvent event, @Nonnull JDA instance) {
+public interface BasicCommand {
+    static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         throw new UnsupportedOperationException("invoke() must be overriden!");
     }
 }

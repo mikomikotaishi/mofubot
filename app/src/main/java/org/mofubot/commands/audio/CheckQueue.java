@@ -6,7 +6,7 @@ import java.util.Queue;
 import javax.annotation.Nonnull;
 
 import org.mofubot.audio.BotAudio;
-import org.mofubot.commands.structures.AudioCommand;
+import org.mofubot.structures.commands.AudioCommand;
 import org.mofubot.utilities.calculations.Temporal;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;

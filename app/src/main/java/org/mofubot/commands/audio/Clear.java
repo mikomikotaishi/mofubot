@@ -3,7 +3,7 @@ package org.mofubot.commands.audio;
 import javax.annotation.Nonnull;
 
 import org.mofubot.audio.BotAudio;
-import org.mofubot.commands.structures.AudioCommand;
+import org.mofubot.structures.commands.AudioCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 

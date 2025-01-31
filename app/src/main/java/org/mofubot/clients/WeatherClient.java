@@ -2,7 +2,7 @@ package org.mofubot.clients;
 
 import java.io.IOException;
 
-import org.mofubot.commands.structures.Client;
+import org.mofubot.structures.Client;
 import org.mofubot.system.ConfigLoader;
 
 import com.google.gson.JsonObject;

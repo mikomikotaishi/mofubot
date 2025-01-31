@@ -2,13 +2,13 @@ package org.mofubot.commands.system;
 
 import javax.annotation.Nonnull;
 
-import org.mofubot.commands.structures.JDAControl;
+import org.mofubot.structures.commands.JDACommand;
 import org.mofubot.system.ConfigLoader;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class ReloadConfig implements JDAControl {
+public class ReloadConfig implements JDACommand {
     private ReloadConfig() {}
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event, @Nonnull JDA instance) {

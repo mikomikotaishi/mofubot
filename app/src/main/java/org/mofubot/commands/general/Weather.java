@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import org.mofubot.commands.structures.APICommand;
 import org.mofubot.clients.WeatherClient;
+import org.mofubot.structures.commands.APICommand;
 
 import com.google.gson.JsonObject;
 
