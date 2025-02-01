@@ -5,7 +5,7 @@ module;
 #include <string>
 #endif
 
-export module Board;
+export module chess.Board;
 
 #ifdef STD_MODULE
 import std;

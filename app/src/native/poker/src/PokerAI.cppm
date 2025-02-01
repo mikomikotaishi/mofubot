@@ -1,3 +1,3 @@
 module;
 
-export module PokerAI;
+export module poker.PokerAI;

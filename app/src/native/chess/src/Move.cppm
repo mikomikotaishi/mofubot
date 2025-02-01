@@ -4,7 +4,7 @@ module;
 
 #endif
 
-export module Move;
+export module chess.Move;
 
 #ifdef STD_MODULE
 import std;

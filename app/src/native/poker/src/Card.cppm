@@ -1,6 +1,6 @@
 module;
 
-export module Card;
+export module poker.Card;
 
 export enum class Rank: int {
     Two = 2,

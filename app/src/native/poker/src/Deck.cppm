@@ -7,13 +7,13 @@ module;
 #include <vector>
 #endif
 
-export module deck;
+export module poker.Deck;
 
 #ifdef STD_MODULE
 import std;
 #endif
 
-import Card;
+import poker.Card;
 
 export class Deck {
 private:
