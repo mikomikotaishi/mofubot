@@ -1,8 +1,14 @@
 module;
 
+#ifndef STD_MODULE
+
+#endif
+
 export module Piece;
 
+#ifdef STD_MODULE
 import std;
+#endif
 
 export enum class PieceType { 
     Empty, 

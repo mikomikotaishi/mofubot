@@ -1,11 +1,15 @@
 module;
 
+#ifndef STD_MODULE
 #include <array>
 #include <string>
+#endif
 
 export module Board;
 
+#ifdef STD_MODULE
 import std;
+#endif
 
 import Move;
 import Piece;
