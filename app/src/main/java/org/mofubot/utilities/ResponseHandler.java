@@ -18,6 +18,12 @@ public class ResponseHandler {
     private static Map<String, String> RESPONSES = new HashMap<>();
 
     static {
+        reloadResponses();
+    }
+
+    public static void reloadResponses() {
+        System.out.println("Emptying map");
+        RESPONSES.clear();
         Path filePath = Paths.get("responses.json");
         if (Files.exists(filePath)) {
             System.out.println("Loading responses.json");

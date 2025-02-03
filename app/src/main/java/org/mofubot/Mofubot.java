@@ -141,6 +141,10 @@ public class Mofubot extends ListenerAdapter {
             Commands.slash("reloadconfig", "Reloads config.properties")
                 .addOptions(new OptionData(STRING, "password", "The master pasword (specified in config.properties)")
                     .setRequired(true)),
+            // Reload responses command
+            Commands.slash("reloadresponses", "Reloads responses.json")
+                .addOptions(new OptionData(STRING, "password", "The master pasword (specified in config.properties)")
+                    .setRequired(true)),
             // Shutdown command
             Commands.slash("shutdown", "Shuts down the bot")
                 .addOptions(new OptionData(STRING, "password", "The master password (specified in config.properties)")
@@ -222,6 +226,12 @@ public class Mofubot extends ListenerAdapter {
                 Rule34.invoke(event);
                 break;
             // System
+            case "reloadconfig":
+                ReloadConfig.invoke(event, jda);
+                break;
+            case "reloadresponses":
+                ReloadResponses.invoke(event, jda);
+                break;
             case "shutdown":
                 Shutdown.invoke(event, jda);
                 break;
