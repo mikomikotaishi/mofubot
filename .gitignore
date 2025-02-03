@@ -4,13 +4,11 @@
 # Ignore Gradle build output directory
 build
 
-# Bot token
+# Bot token and personalised information
 app/src/main/resources/config.properties
+app/src/main/resources/responses.json
 app/bin
 app/build
-
-# Debug
-app/src/main/java/org/mofubot/utilities/alternate_responses.txt
 
 # Tools
 /.direnv/
