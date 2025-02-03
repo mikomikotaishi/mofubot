@@ -13,7 +13,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class WeatherClient extends Client {
-    private final OkHttpClient client = new OkHttpClient();
     private final String API_KEY = ConfigLoader.getWeatherToken();
 
     public JsonObject getWeather(String location) throws IOException {
