@@ -93,6 +93,12 @@ application {
 //     dependsOn("findAutomaticModules")
 // }
 
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf(
+        "--add-reads", "org.mofubot=ALL-UNNAMED"
+    ))
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
