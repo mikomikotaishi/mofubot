@@ -30,6 +30,9 @@ dependencies {
 
     implementation(kotlin("stdlib"))
 
+    // Jakarta
+    implementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
+
     // JDA
     implementation("net.dv8tion:JDA:5.2.2")
 
@@ -43,7 +46,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor")
 
     // JSON
-    implementation("com.google.code.gson:gson:2.12.0")
+    implementation("com.google.code.gson:gson:2.12.1")
 
     // 
     // implementation("pw.aru.api:nekos4j:1.0")

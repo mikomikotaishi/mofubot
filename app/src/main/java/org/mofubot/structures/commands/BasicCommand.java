@@ -1,6 +1,6 @@
 package org.mofubot.structures.commands;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 

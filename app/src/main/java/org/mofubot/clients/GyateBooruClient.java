@@ -2,7 +2,7 @@ package org.mofubot.clients;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.structures.Client;
 import org.mofubot.system.ConfigLoader;

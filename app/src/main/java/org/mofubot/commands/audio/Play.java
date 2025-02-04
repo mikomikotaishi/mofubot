@@ -1,6 +1,6 @@
 package org.mofubot.commands.audio;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.audio.*;
 import org.mofubot.structures.commands.AudioCommand;

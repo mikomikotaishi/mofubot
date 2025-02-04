@@ -3,7 +3,7 @@ package org.mofubot.commands.audio;
 import java.util.Iterator;
 import java.util.Queue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.audio.BotAudio;
 import org.mofubot.structures.commands.AudioCommand;

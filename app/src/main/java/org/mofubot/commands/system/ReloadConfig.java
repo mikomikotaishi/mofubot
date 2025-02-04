@@ -1,6 +1,6 @@
 package org.mofubot.commands.system;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.structures.commands.JDACommand;
 import org.mofubot.system.ConfigLoader;

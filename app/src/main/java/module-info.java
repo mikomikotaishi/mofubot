@@ -1,13 +1,12 @@
 module org.mofubot {
     requires java.base;
     requires java.net.http;
+    requires jakarta.annotation;
     requires com.google.gson;
     requires okhttp3;
     requires net.dv8tion.jda;
-    // requires dev.arbjerg.lavaplayer;
-    // requires dev.lavalink.youtube.common;
-    // requires org.junit.jupiter.api;
-    // requires org.junit.platform.launcher;
+
+    opens org.mofubot to com.google.gson;
 
     exports org.mofubot;
     exports org.mofubot.commands.admin;

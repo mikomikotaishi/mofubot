@@ -2,7 +2,7 @@ package org.mofubot.commands.imageboard;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.clients.Rule34Client;
 import org.mofubot.structures.commands.APICommand;

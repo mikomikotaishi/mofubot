@@ -1,6 +1,6 @@
 package org.mofubot.structures;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import okhttp3.OkHttpClient;
 

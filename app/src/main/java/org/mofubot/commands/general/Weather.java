@@ -2,7 +2,7 @@ package org.mofubot.commands.general;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.clients.WeatherClient;
 import org.mofubot.structures.commands.APICommand;

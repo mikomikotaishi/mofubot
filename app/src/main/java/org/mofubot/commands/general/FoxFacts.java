@@ -1,6 +1,6 @@
 package org.mofubot.commands.general;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.structures.commands.BasicCommand;
 import org.mofubot.utilities.calculations.RandomNumberGenerator;

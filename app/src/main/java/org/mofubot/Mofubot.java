@@ -4,8 +4,9 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 import java.util.EnumSet;
 
-import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
+
+import jakarta.annotation.Nonnull;
 
 import org.mofubot.commands.admin.*;
 import org.mofubot.commands.audio.*;
