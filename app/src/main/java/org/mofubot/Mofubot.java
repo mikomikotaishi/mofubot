@@ -35,17 +35,14 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class Mofubot extends ListenerAdapter {
-    private final JDA jda;
-    private final String MASTER_PASSWORD;
+    @Nonnull private final JDA jda;
 
     public Mofubot() {
         this.jda = null;
-        this.MASTER_PASSWORD = null;
     }
 
-    public Mofubot(JDA jda, String shutdownPassword) {
+    public Mofubot(@Nonnull JDA jda) {
         this.jda = jda;
-        this.MASTER_PASSWORD = shutdownPassword;
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
@@ -152,7 +149,7 @@ public class Mofubot extends ListenerAdapter {
                     .setRequired(true))
         ).queue();
 
-        Mofubot botInstance = new Mofubot(api, MASTER_PASSWORD);
+        Mofubot botInstance = new Mofubot(api);
         api.addEventListener(botInstance);
     }
 

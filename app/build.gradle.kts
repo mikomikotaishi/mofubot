@@ -66,36 +66,6 @@ application {
     mainClass = "org.mofubot.Mofubot"
 }
 
-// tasks.register("findAutomaticModules") {
-//     group = "verification"
-//     description = "Finds automatic module names of all dependencies"
-
-//     doLast {
-//         val jdepsPath = "${System.getProperty("java.home")}/bin/jdeps"
-//         val runtimeClasspath = configurations.runtimeClasspath.get().files
-
-//         println("Analysing dependencies for automatic module names...")
-
-//         runtimeClasspath.forEach { jar ->
-//             if (jar.name.endsWith(".jar")) {
-//                 val output = ByteArrayOutputStream()
-//                 exec {
-//                     commandLine(jdepsPath, "--module-path", configurations.runtimeClasspath.get().asPath, "-s", jar.absolutePath)
-//                     standardOutput = output
-//                     errorOutput = System.err
-//                 }
-//                 println("Dependency: ${jar.name}")
-//                 println(output.toString().trim())
-//                 println("-".repeat(80))
-//             }
-//         }
-//     }
-// }
-
-// tasks.named("build") {
-//     dependsOn("findAutomaticModules")
-// }
-
 tasks.withType<JavaCompile> {
     options.compilerArgs.addAll(listOf(
         "--add-reads", "org.mofubot=ALL-UNNAMED"
@@ -105,4 +75,8 @@ tasks.withType<JavaCompile> {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs = listOf("--add-reads", "org.mofubot=ALL-UNNAMED")
 }
