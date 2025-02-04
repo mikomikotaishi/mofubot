@@ -2,6 +2,8 @@ package org.mofubot.clients;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.mofubot.structures.Client;
 import org.mofubot.system.ConfigLoader;
 
@@ -12,21 +14,19 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class WeatherClient extends Client {
-    private final String API_KEY = ConfigLoader.getWeatherToken();
-
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
 
     public WeatherClient() {
-        super(BASE_URL);
+        super(BASE_URL, ConfigLoader.getWeatherToken());
     }
 
-    public JsonObject getWeather(String location) throws IOException {
-        if (API_KEY == null || API_KEY.isEmpty()) {
+    public JsonObject getWeather(@Nonnull String location) throws IOException {
+        if (getApiKey() == null || getApiKey().isEmpty()) {
             System.err.println("Weather API key missing!");
-            throw new IllegalArgumentException("No weather token found!");
+            throw new IllegalArgumentException("No Weather token found!");
         }
 
-        String URL = BASE_URL + location + "&appid=" + API_KEY + "&units=metric";
+        String URL = BASE_URL + location + "&appid=" + getApiKey() + "&units=metric";
         Request request = new Request.Builder().url(URL).build();
         System.out.println("Issuing request to OpenWeatherMap for location: " + location);
         try (Response response = client.newCall(request).execute()) {

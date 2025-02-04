@@ -20,6 +20,10 @@ public class Danbooru implements APICommand {
 
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Danbooru command invoked");
+        if (danbooruClient.getApiKey() == null) {
+            System.err.println("Failed to invoke Danbooru command due to missing API token.");
+            event.reply("Sorry, Danbooru API token was not provided, I cannot retrieve anything.");
+        }
         String tag1 = event.getOption("tag1").getAsString();
         String tag2 = event.getOption("tag2") != null ? event.getOption("tag2").getAsString() : null;
         try {

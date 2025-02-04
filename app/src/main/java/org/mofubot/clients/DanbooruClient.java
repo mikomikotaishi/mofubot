@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import org.mofubot.structures.Client;
+import org.mofubot.system.ConfigLoader;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
@@ -16,15 +17,20 @@ public class DanbooruClient extends Client {
     private static final String BASE_URL = "https://danbooru.donmai.us/posts.json?tags=";
 
     public DanbooruClient() {
-        super(BASE_URL);
+        super(BASE_URL, ConfigLoader.getDanbooruToken());
     }
     
     public JsonArray getPosts(@Nonnull String tag1, String tag2) throws IOException {
+        if (getApiKey() == null || getApiKey().isEmpty()) {
+            System.err.println("Danbooru API key missing!");
+            throw new IllegalArgumentException("No Danbooru token found!");
+        }
+
         String tags = tag1;
         if (tag2 != null && !tag2.isEmpty())
             tags += ("+" + tag2);
         
-        String url = BASE_URL + tags;
+        String url = BASE_URL + tags + "&api_key" + getApiKey();
         Request request = new Request.Builder().url(url).build();
         System.out.println("Issuing request to Danbooru for tags: " + tags);
         try (Response response = client.newCall(request).execute()) {
