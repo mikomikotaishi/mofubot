@@ -6,9 +6,8 @@ module org.mofubot {
     requires okhttp3;
     requires transitive net.dv8tion.jda;
 
-    opens org.mofubot to com.google.gson;
+    opens org.mofubot.core to com.google.gson;
 
-    exports org.mofubot;
     exports org.mofubot.audio;
     exports org.mofubot.clients;
     exports org.mofubot.commands.admin;
@@ -17,6 +16,7 @@ module org.mofubot {
     exports org.mofubot.commands.general;
     exports org.mofubot.commands.imageboard;
     exports org.mofubot.commands.system;
+    exports org.mofubot.core;
     exports org.mofubot.game.chess;
     exports org.mofubot.game.poker;
     exports org.mofubot.structures;

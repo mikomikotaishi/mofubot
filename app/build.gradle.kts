@@ -48,6 +48,10 @@ dependencies {
     // JSON
     implementation("com.google.code.gson:gson:2.12.1")
 
+    // SLF4J
+    implementation("org.slf4j:slf4j-api:2.0.0-alpha5")
+    implementation("org.slf4j:slf4j-simple:2.0.0-alpha5")
+
     // 
     // implementation("pw.aru.api:nekos4j:1.0")
 }
@@ -57,13 +61,13 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-    // modularity.inferModulePath = true 
+    modularity.inferModulePath = true 
 }
 
 application {
     // Define the main class for the application.
     // mainModule = "org.mofubot"
-    mainClass = "org.mofubot.Mofubot"
+    mainClass = "org.mofubot.core.Mofubot"
 }
 
 tasks.withType<JavaCompile> {

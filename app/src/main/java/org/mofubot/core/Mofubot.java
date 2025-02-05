@@ -1,4 +1,4 @@
-package org.mofubot;
+package org.mofubot.core;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
@@ -47,7 +47,6 @@ public class Mofubot extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException, InterruptedException {
         String BOT_TOKEN = ConfigLoader.getBotToken();
-        String MASTER_PASSWORD = ConfigLoader.getMasterPassword();
 
         EnumSet<GatewayIntent> INTENTS = EnumSet.of(
             GatewayIntent.GUILD_MEMBERS,
