@@ -1,4 +1,4 @@
-package org.mofubot.cryptography;
+package org.mofubot.commands.cryptography;
 
 import org.mofubot.structures.commands.BasicCommand;
 
