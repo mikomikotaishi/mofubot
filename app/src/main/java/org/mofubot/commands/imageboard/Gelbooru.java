@@ -6,7 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import org.mofubot.clients.GelbooruClient;
 import org.mofubot.structures.commands.APICommand;
-import org.mofubot.utilities.calculations.RandomNumberGenerator;
+import org.mofubot.utilities.RandomNumberGenerator;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

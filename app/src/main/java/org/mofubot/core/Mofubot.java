@@ -15,7 +15,6 @@ import org.mofubot.commands.general.*;
 import org.mofubot.commands.imageboard.*;
 import org.mofubot.commands.system.*;
 import org.mofubot.system.*;
-import org.mofubot.utilities.ResponseHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

@@ -7,7 +7,7 @@ import jakarta.annotation.Nonnull;
 
 import org.mofubot.audio.BotAudio;
 import org.mofubot.structures.commands.AudioCommand;
-import org.mofubot.utilities.calculations.Temporal;
+import org.mofubot.utilities.Temporal;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 

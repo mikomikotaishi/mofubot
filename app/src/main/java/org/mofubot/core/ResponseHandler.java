@@ -1,4 +1,4 @@
-package org.mofubot.utilities;
+package org.mofubot.core;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -12,6 +12,7 @@ module org.mofubot {
     exports org.mofubot.clients;
     exports org.mofubot.commands.admin;
     exports org.mofubot.commands.audio;
+    exports org.mofubot.commands.cryptography;
     exports org.mofubot.commands.game;
     exports org.mofubot.commands.general;
     exports org.mofubot.commands.imageboard;
@@ -19,8 +20,5 @@ module org.mofubot {
     exports org.mofubot.core;
     exports org.mofubot.game.chess;
     exports org.mofubot.game.poker;
-    exports org.mofubot.structures;
-    exports org.mofubot.structures.commands;
     exports org.mofubot.system;
-    exports org.mofubot.utilities;
 }

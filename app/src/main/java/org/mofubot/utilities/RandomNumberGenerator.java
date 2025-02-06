@@ -1,4 +1,4 @@
-package org.mofubot.utilities.calculations;
+package org.mofubot.utilities;
 
 import java.util.concurrent.ThreadLocalRandom;
 

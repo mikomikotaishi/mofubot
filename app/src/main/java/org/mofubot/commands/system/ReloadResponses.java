@@ -2,9 +2,9 @@ package org.mofubot.commands.system;
 
 import jakarta.annotation.Nonnull;
 
+import org.mofubot.core.ResponseHandler;
 import org.mofubot.structures.commands.JDACommand;
 import org.mofubot.system.ConfigLoader;
-import org.mofubot.utilities.ResponseHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
