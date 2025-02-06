@@ -1,7 +1,7 @@
 package org.mofubot.commands.cryptography;
 
-import org.mofubot.structures.commands.BasicCommand;
+import org.mofubot.structures.commands.CryptographyCommand;
 
-public class EncryptAES implements BasicCommand {
+public class EncryptAES implements CryptographyCommand {
     
 }

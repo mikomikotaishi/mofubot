@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 
 import org.mofubot.commands.admin.*;
 import org.mofubot.commands.audio.*;
+import org.mofubot.commands.cryptography.*;
 import org.mofubot.commands.game.*;
 import org.mofubot.commands.general.*;
 import org.mofubot.commands.imageboard.*;
@@ -48,10 +49,12 @@ public class Mofubot extends ListenerAdapter {
         String BOT_TOKEN = ConfigLoader.getBotToken();
 
         EnumSet<GatewayIntent> INTENTS = EnumSet.of(
+            GatewayIntent.GUILD_EXPRESSIONS,
             GatewayIntent.GUILD_MEMBERS,
             GatewayIntent.GUILD_MESSAGES,
             GatewayIntent.GUILD_VOICE_STATES,
-            GatewayIntent.MESSAGE_CONTENT
+            GatewayIntent.MESSAGE_CONTENT,
+            GatewayIntent.SCHEDULED_EVENTS
         );
 
         JDA api = JDABuilder.createDefault(BOT_TOKEN, INTENTS)
