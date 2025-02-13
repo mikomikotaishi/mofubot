@@ -1,12 +1,14 @@
 package org.mofubot.utilities.cryptography;
 
 import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -16,7 +18,7 @@ public class AES {
     private static final ThreadLocal<Cipher> cipher = ThreadLocal.withInitial(() -> {
         try {
             return Cipher.getInstance("AES");
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException(e);
         }
     });
@@ -26,7 +28,7 @@ public class AES {
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(256);
             return keyGen;
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     });

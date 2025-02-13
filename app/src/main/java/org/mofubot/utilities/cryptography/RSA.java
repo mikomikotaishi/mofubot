@@ -14,6 +14,7 @@ import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class RSA {
     private RSA() {}
@@ -21,7 +22,7 @@ public class RSA {
     private static final ThreadLocal<Cipher> cipher = ThreadLocal.withInitial(() -> {
         try {
             return Cipher.getInstance("RSA");
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException(e);
         }
     });
@@ -31,7 +32,7 @@ public class RSA {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             return keyGen.generateKeyPair();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     });

@@ -47,7 +47,14 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void skip() {
-        player.stopTrack();
+        AudioTrack nextTrack = queue.poll();
+        if (nextTrack != null) {
+            System.out.println("Skipping to next track...");
+            player.startTrack(nextTrack, false);
+        } else {
+            System.out.println("No more tracks to skip.");
+            player.stopTrack();
+        }
     }
 
     public void clear() {
