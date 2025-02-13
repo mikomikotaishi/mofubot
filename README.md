@@ -18,7 +18,6 @@ To shut off the bot, run the `shutdown` bot command with your shutdown password.
 
 ## TODO:
 Upcoming features:
-- Fix the music system
-    - Include support for other streaming services
+- Include support for other streaming services
 - Implement imageboard image grabbing utilities
 - Implement simple games with the bot (using C++)

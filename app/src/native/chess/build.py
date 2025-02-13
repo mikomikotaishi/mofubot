@@ -1,1 +1,0 @@
-"clang++ -std=c++23 -stdlib=libc++ -Wno-reserved-identifier -Wno-reserved-module-identifier --precompile --precompile -o std.pcm /usr/share/libc++/v1/std.cppm"

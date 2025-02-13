@@ -3,6 +3,8 @@ package org.mofubot.audio;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.mofubot.utilities.Temporal;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -14,6 +16,13 @@ public class TrackScheduler extends AudioEventAdapter {
     private final BotAudio botAudio;
     private final AudioPlayer player;
     private final Queue<AudioTrack> queue;
+    MessageChannel textChannel = botAudio.getTextChannel();
+
+    private void sendNowPlayingMessage(AudioTrack track) {
+        String trackInfo = track.getInfo().title + " (" + Temporal.getFormattedTime(track.getInfo().length) + ")";
+        if (textChannel != null)
+            textChannel.sendMessage("Now playing: **" + trackInfo + "**").queue();
+    }
 
     public TrackScheduler(BotAudio botAudio, AudioPlayer player) {
         this.botAudio = botAudio;
@@ -22,11 +31,15 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track) {
+        String trackInfo = track.getInfo().title + " (" + Temporal.getFormattedTime(track.getInfo().length) + ")";
         if (!player.startTrack(track, true)) {
             System.out.println("Queued track: " + track.getInfo().title);
             queue.offer(track);
+            if (textChannel != null)
+                textChannel.sendMessage("Queued track: **" + trackInfo + "**").queue();
         } else {
             System.out.println("Now playing: " + track.getInfo().title);
+            sendNowPlayingMessage(track);
         }
     }
 
@@ -37,6 +50,7 @@ public class TrackScheduler extends AudioEventAdapter {
             if (nextTrack != null) {
                 System.out.println("Current song ended. Beginning next song...");
                 player.startTrack(nextTrack, false);
+                sendNowPlayingMessage(nextTrack);
             } else {
                 System.out.println("Song queue empty.");
                 MessageChannel textChannel = botAudio.getTextChannel();
