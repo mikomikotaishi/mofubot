@@ -98,8 +98,28 @@ public class Mofubot extends ListenerAdapter {
             // ====== Cryptography commands ======
             // Encrypt AES command
             Commands.slash("encryptaes", "Encrypt using AES")
-            .addOptions(new OptionData(STRING, "message", "The message to encrypt")
-                .setRequired(true)),
+                .addOptions(new OptionData(STRING, "message", "The message to encrypt")
+                    .setRequired(true)),
+            // SHA-256 command
+            Commands.slash("sha256", "Hash a message using SHA-256")
+                .addOptions(new OptionData(STRING, "message", "The message to hash")
+                    .setRequired(true)),
+            // SHA-512 command
+            Commands.slash("sha512", "Hash a message using SHA-512")
+                .addOptions(new OptionData(STRING, "message", "The message to hash")
+                    .setRequired(true)),
+            // Verify SHA-256 command
+            Commands.slash("verifysha256", "Verify a SHA-256 hash")
+                .addOptions(new OptionData(STRING, "message", "The message to verify")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "hash", "The hash to verify against")
+                    .setRequired(true)),
+            // Verify SHA-512 command
+            Commands.slash("verifysha512", "Verify a SHA-512 hash")
+                .addOptions(new OptionData(STRING, "message", "The message to verify")
+                    .setRequired(true))
+                .addOptions(new OptionData(STRING, "hash", "The hash to verify against")
+                    .setRequired(true)),
 
             // ====== Game commands ======
             // Magic 8 Ball command
@@ -203,6 +223,19 @@ public class Mofubot extends ListenerAdapter {
                 break;
             case "skip":
                 Skip.invoke(event);
+                break;
+            // Cryptography
+            case "sha256":
+                SHA256.invoke(event);
+                break;
+            case "sha512":
+                SHA512.invoke(event);
+                break;
+            case "verifysha256":
+                VerifySHA256.invoke(event);
+                break;
+            case "verifysha512":
+                VerifySHA512.invoke(event);
                 break;
             // Game
             case "magic8ball":
