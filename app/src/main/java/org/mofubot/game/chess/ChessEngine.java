@@ -4,6 +4,10 @@ import java.lang.foreign.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Interface to the chess engine.
+ * This class is used to load the chess engine library.
+ */
 public class ChessEngine {
     static {
         String os = System.getProperty("os.name").toLowerCase();

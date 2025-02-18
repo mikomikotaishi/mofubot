@@ -12,15 +12,31 @@ import com.google.gson.JsonParser;
 
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
+/**
+ * Class to handle responses to messages.
+ * This class is used to send responses to messages based on keywords.
+ */
 public class ResponseHandler {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private ResponseHandler() {}
 
+    /**
+     * Map of keywords to responses.
+     */
     private static Map<String, String> RESPONSES = new HashMap<>();
 
+    /**
+     * Loads responses from responses.json.
+     */
     static {
         reloadResponses();
     }
 
+    /**
+     * Reloads responses from responses.json.
+     */
     public static void reloadResponses() {
         System.out.println("Emptying map");
         RESPONSES.clear();
@@ -41,6 +57,11 @@ public class ResponseHandler {
         }
     }
 
+    /**
+     * Handles a message by sending a response if a keyword is found.
+     * @param content The message content.
+     * @param textChannel The channel to send the response to.
+     */
     public static void handleMessage(String content, MessageChannel textChannel) {
         System.out.println("Parsing for responses");
         System.out.println("Message: " + content);

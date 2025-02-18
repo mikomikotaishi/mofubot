@@ -7,7 +7,20 @@ import org.mofubot.structures.commands.AudioCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to clear the audio queue.
+ */
 public class Clear implements AudioCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Clear() {}
+
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Clear command invoked.");
         long guildId = event.getGuild().getIdLong();

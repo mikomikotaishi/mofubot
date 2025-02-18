@@ -7,7 +7,20 @@ import org.mofubot.structures.commands.AudioCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to disconnect the bot from the voice channel.
+ */
 public class Disconnect implements AudioCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Disconnect() {}
+
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Disconnect command invoked.");
         long guildId = event.getGuild().getIdLong();

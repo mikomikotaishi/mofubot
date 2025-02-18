@@ -14,11 +14,25 @@ import com.google.gson.JsonObject;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to retrieve an image from Gyate Booru.
+ */
 public class GyateBooru implements APICommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private GyateBooru() {}
 
+    /**
+     * The Gyate Booru client.
+     */
     private static final GyateBooruClient gyatebooruClient = new GyateBooruClient();
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Gyate Booru command invoked");
         if (gyatebooruClient.getApiKey() == null) {

@@ -7,9 +7,18 @@ import org.mofubot.utilities.RandomNumberGenerator;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to provide a Magic 8 Ball response.
+ */
 public class Magic8Ball implements GameCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Magic8Ball() {};
 
+    /**
+     * Array of Magic 8 Ball responses.
+     */
     private static final String[] ANSWERS = {
         // Affirmative
         "It is certain :white_check_mark:",
@@ -36,11 +45,21 @@ public class Magic8Ball implements GameCommand {
         "Very doubtful :x:"
     };
 
+    /**
+     * Gets a random Magic 8 Ball response.
+     *
+     * @return A random Magic 8 Ball response.
+     */
     private static String getResponse() {
         int index = RandomNumberGenerator.generateRandomNumber(ANSWERS.length);
         return ANSWERS[index];
     }
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Magic 8 Ball command executed.");
         event.reply(Magic8Ball.getResponse()).queue();

@@ -13,9 +13,20 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
+/**
+ * Command to ban a user from the server.
+ */
 public class Ban implements BasicCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Ban() {}
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Ban command attempted.");
 

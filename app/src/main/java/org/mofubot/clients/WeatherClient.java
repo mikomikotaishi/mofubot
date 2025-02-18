@@ -13,13 +13,29 @@ import com.google.gson.JsonParser;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Client for OpenWeatherMap.
+ */
 public class WeatherClient extends Client {
+    /**
+     * The base URL for OpenWeatherMap.
+     */
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
 
+    /**
+     * Constructs a new OpenWeatherMap client.
+     */
     public WeatherClient() {
         super(BASE_URL, ConfigLoader.getWeatherToken());
     }
 
+    /**
+     * Retrieves the weather from OpenWeatherMap.
+     *
+     * @param location The location.
+     * @return The weather.
+     * @throws IOException If an error occurs while retrieving the weather.
+     */
     public JsonObject getWeather(@Nonnull String location) throws IOException {
         if (getApiKey() == null || getApiKey().isEmpty()) {
             System.err.println("Weather API key missing!");

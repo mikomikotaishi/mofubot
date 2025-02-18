@@ -14,10 +14,21 @@ import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class E621 implements APICommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private E621() {}
 
+    /**
+     * The E621 client.
+     */
     private static final E621Client e621Client = new E621Client();
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("e621 command invoked");
         if (e621Client.getApiKey() == null) {

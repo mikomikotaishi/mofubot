@@ -9,7 +9,20 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+/**
+ * Command to play audio.
+ */
 public class Play implements AudioCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Play() {}
+
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Play command invoked.");
         if (event.getMember().getVoiceState() == null || !event.getMember().getVoiceState().inAudioChannel()) {

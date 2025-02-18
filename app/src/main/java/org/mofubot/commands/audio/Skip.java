@@ -7,7 +7,20 @@ import org.mofubot.structures.commands.AudioCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to skip the current track.
+ */
 public class Skip implements AudioCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Skip() {}
+
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Skip command invoked.");
         long guildId = event.getGuild().getIdLong();

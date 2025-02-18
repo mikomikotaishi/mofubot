@@ -13,11 +13,25 @@ import com.google.gson.JsonObject;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to retrieve an image from Gelbooru.
+ */
 public class Gelbooru implements APICommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Gelbooru() {}
 
+    /**
+     * The Gelbooru client.
+     */
     private static final GelbooruClient gelbooruClient = new GelbooruClient();
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Gelbooru command invoked");
         if (gelbooruClient.getApiKey() == null) {

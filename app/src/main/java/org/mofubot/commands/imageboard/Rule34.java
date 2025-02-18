@@ -13,11 +13,25 @@ import com.google.gson.JsonObject;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to retrieve an image from Rule34.
+ */
 public class Rule34 implements APICommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Rule34() {}
 
+    /**
+     * The Rule34 client.
+     */
     private static final Rule34Client rule34Client = new Rule34Client();
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Rule34 command invoked");
         if (rule34Client.getApiKey() == null) {

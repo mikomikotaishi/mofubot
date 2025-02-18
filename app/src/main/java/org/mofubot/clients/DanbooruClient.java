@@ -13,13 +13,30 @@ import com.google.gson.JsonParser;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * Client for Danbooru.
+ */
 public class DanbooruClient extends Client {
+    /**
+     * The base URL for Danbooru.
+     */
     private static final String BASE_URL = "https://danbooru.donmai.us/posts.json?tags=";
 
+    /**
+     * Constructs a new Danbooru client.
+     */
     public DanbooruClient() {
         super(BASE_URL, ConfigLoader.getDanbooruToken());
     }
     
+    /**
+     * Retrieves posts from Danbooru.
+     *
+     * @param tag1 The first tag.
+     * @param tag2 The second tag.
+     * @return The posts.
+     * @throws IOException If an error occurs while retrieving the posts.
+     */
     public JsonArray getPosts(@Nonnull String tag1, String tag2) throws IOException {
         if (getApiKey() == null || getApiKey().isEmpty()) {
             System.err.println("Danbooru API key missing!");

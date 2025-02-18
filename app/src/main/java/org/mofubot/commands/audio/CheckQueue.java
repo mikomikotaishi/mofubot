@@ -13,7 +13,20 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to check the music queue.
+ */
 public class CheckQueue implements AudioCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private CheckQueue() {}
+
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Check queue command invoked.");
         long guildId = event.getGuild().getIdLong();

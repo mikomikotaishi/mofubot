@@ -6,9 +6,20 @@ import org.mofubot.structures.commands.BasicCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to provide a simple ping response.
+ */
 public class Ping implements BasicCommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Ping() {}
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Ping command invoked.");
         long startTime = System.currentTimeMillis();

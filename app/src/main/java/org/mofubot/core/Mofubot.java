@@ -35,17 +35,37 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
+/**
+ * The main class for the bot.
+ * This class initialises the bot, registers commands, and listens for events.
+ */
 public class Mofubot extends ListenerAdapter {
+    /**
+     * The JDA instance to use.
+     */
     @Nonnull private final JDA jda;
 
+    /**
+     * Constructor for the bot.
+     */
     public Mofubot() {
         this.jda = null;
     }
 
+    /**
+     * Constructor for the bot.
+     * @param jda The JDA instance to use
+     */
     public Mofubot(@Nonnull JDA jda) {
         this.jda = jda;
     }
 
+    /**
+     * Main method for the bot.
+     * @param args Command line arguments
+     * @throws LoginException If the bot fails to log in
+     * @throws InterruptedException If the bot is interrupted
+     */
     public static void main(String[] args) throws LoginException, InterruptedException {
         String BOT_TOKEN = ConfigLoader.getBotToken();
 
@@ -183,6 +203,10 @@ public class Mofubot extends ListenerAdapter {
         api.addEventListener(botInstance);
     }
 
+    /**
+     * Method to handle messages received by the bot.
+     * @param event The event to handle
+     */
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         Message message = event.getMessage();
@@ -198,7 +222,10 @@ public class Mofubot extends ListenerAdapter {
         ResponseHandler.handleMessage(content, textChannel);
     }
 
-    
+    /**
+     * Method to handle slash command interactions.
+     * @param event The event to handle
+     */
     @Override 
     public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         if (event.getGuild() == null)

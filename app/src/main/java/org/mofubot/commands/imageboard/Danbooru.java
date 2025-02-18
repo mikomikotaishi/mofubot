@@ -13,11 +13,25 @@ import com.google.gson.JsonObject;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+/**
+ * Command to retrieve an image from Danbooru.
+ */
 public class Danbooru implements APICommand {
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Danbooru() {}
 
+    /**
+     * The Danbooru client.
+     */
     private static final DanbooruClient danbooruClient = new DanbooruClient();
 
+    /**
+     * Invokes the command.
+     *
+     * @param event The event that triggered the command.
+     */
     public static void invoke(@Nonnull SlashCommandInteractionEvent event) {
         System.out.println("Danbooru command invoked");
         if (danbooruClient.getApiKey() == null) {
